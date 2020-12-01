@@ -2,10 +2,10 @@ class Config:
     DEBUG = True
 
 
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://niklas:niklas@localhost/smilecook'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://jondatabase:cykablyat3@localhost/instructor'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    SECRET_KEY = 'super-secret-key'
+    SECRET_KEY = 'secret-key-not-known-222-1'
     JWT_ERROR_MESSAGE_KEY = 'message'
 
     JWT_BLACKLIST_ENABLED = True
