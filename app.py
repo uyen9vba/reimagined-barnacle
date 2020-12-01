@@ -6,7 +6,7 @@ from config import Config
 from extensions import db, jwt
 from models.user import User
 from resources.recipe import RecipeListResource, RecipeResource, RecipePublishResource
-from resources.user import UserListResource, UserResource, MeResource, UserRecipeListResource
+from resources.user import UserListResource, UserResource, MeResource, UserRecipeListResource, UserActivateResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
 
 def create_app():
@@ -33,6 +33,7 @@ def check_if_token_in_blacklist(decrypted_token):
 def register_resources(app):
     api = Api(app)
 
+    api.add_resource(UserActivateResource, '/users/activate/<string:token>')
     api.add_resource(TokenResource, '/token')
     api.add_resource(RefreshResource, '/refresh')
     api.add_resource(RevokeResource, '/revoke')

@@ -1,9 +1,11 @@
-from flask import request
+from flask import request, url_for
 from flask_restful import Resource
 from http import HTTPStatus
 from flask_jwt_extended import jwt_optional, get_jwt_identity, jwt_required
 from webargs import fields
 from webargs.flaskparser import use_kwargs
+from mailgun import MailgunApi
+from utils import generate_token, verify_token
 
 from utils import hash_password
 from models.user import User
@@ -15,6 +17,9 @@ user_schema = UserSchema()
 user_public_schema = UserSchema(exclude=('email', ))
 
 recipe_list_schema = RecipeSchema(many=True)
+
+mailgun = MailgunApi(domain='sandboxfaeda8c23f0548b083439418ad840fdb.mailgun.org',
+                     api_key='c05e12b91ff630d6e51b809e7bbcd7c3-95f6ca46-e7e23550')
 
 class UserListResource(Resource):
     def post(self):
@@ -36,6 +41,22 @@ class UserListResource(Resource):
         user = User(**data)
 
         user.save()
+
+        token = generate_token(user.email, salt='activate')
+
+        subject = 'Please confirm your registration.'
+
+        link = url_for('useractivateresource',
+                       token=token,
+                       _external=True)
+
+        text = 'Hi, Thanks for using ImageApp! Please confirm your registration by clicking on the link: {}'.format(
+            link)
+
+        mailgun.send_email(to=user.email,
+                           subject=subject,
+                           text=text)
+
 
         return user_schema.dump(user).data, HTTPStatus.CREATED
 
@@ -82,3 +103,27 @@ class UserRecipeListResource(Resource):
         recipes = Recipe.get_all_by_user(user_id=user.id, visibility=visibility)
 
         return recipe_list_schema.dump(recipes).data, HTTPStatus.OK
+
+
+class UserActivateResource(Resource):
+
+    def get(self, token):
+
+        email = verify_token(token, salt='activate')
+
+        if email is False:
+            return {'message': 'Invalid token or token expired'}, HTTPStatus.BAD_REQUEST
+
+        user = User.get_by_email(email=email)
+
+        if not user:
+            return {'message': 'User not found'}, HTTPStatus.NOT_FOUND
+
+        if user.is_active is True:
+            return {'message': 'The user account is already activated'}, HTTPStatus.BAD_REQUEST
+
+        user.is_active = True
+
+        user.save()
+
+        return {}, HTTPStatus.NO_CONTENT
