@@ -10,15 +10,15 @@ import os
 from extensions import image_set
 from utils import hash_password, generate_token, verify_token, save_image
 from models.user import User
-from models.recipe import Recipe
+from models.image import Image
 from schemas.user import UserSchema
-from schemas.recipe import RecipeSchema
+from schemas.image import ImageSchema
 
 user_schema = UserSchema()
 user_public_schema = UserSchema(exclude=('email', ))
 user_avatar_schema = UserSchema(only=('avatar_url', ))
 
-recipe_list_schema = RecipeSchema(many=True)
+recipe_list_schema = ImageSchema(many=True)
 
 
 
@@ -87,7 +87,7 @@ class MeResource(Resource):
 
         return user_schema.dump(user).data, HTTPStatus.OK
 
-class UserRecipeListResource(Resource):
+class UserImageListResource(Resource):
     @jwt_optional
     @use_kwargs({'visibility': fields.Str(missing='public')})
     def get(self, username, visibility):
