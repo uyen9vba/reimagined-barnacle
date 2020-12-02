@@ -4,7 +4,6 @@ from flask_uploads import UploadSet, IMAGES
 
 db = SQLAlchemy()
 jwt = JWTManager()
-
 image_set = UploadSet('images', IMAGES)
-UPLOADED_IMAGES_DEST = 'static/images'
+
 
