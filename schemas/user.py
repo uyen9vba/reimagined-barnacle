@@ -11,7 +11,7 @@ class UserSchema(Schema):
     username = fields.String(required=True)
     email = fields.Email(required=True)
     password = fields.Method(required=True, deserialize='load_password')
-
+    avatar_url = fields.Method(serialize='dump_avatar_url')
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
 

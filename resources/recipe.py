@@ -6,6 +6,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required, jwt_optional
 from models.recipe import Recipe
 from schemas.recipe import RecipeSchema
 
+
 recipe_schema = RecipeSchema()
 recipe_list_schema = RecipeSchema(many=True)
 

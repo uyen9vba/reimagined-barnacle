@@ -1,6 +1,8 @@
 from extensions import db
 
 class User(db.Model):
+
+
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -30,4 +32,5 @@ class User(db.Model):
     @classmethod
     def get_by_id(cls, id):
         return cls.query.filter_by(id=id).first()
+
 
