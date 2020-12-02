@@ -11,6 +11,7 @@ class User(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     updated_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now(),
             onupdate=db.func.now())
+    avatar_image = db.Column(db.String(100), default=None)
 
     recipes = db.relationship('Recipe', backref='user')
     

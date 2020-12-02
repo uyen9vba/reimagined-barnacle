@@ -1,12 +1,13 @@
 from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_restful import Api
+from flask_uploads import configure_uploads, patch_request_class
 
 from config import Config
-from extensions import db, jwt
+from extensions import db, jwt, image_set
 from models.user import User
 from resources.recipe import RecipeListResource, RecipeResource, RecipePublishResource
-from resources.user import UserListResource, UserResource, MeResource, UserRecipeListResource, UserActivateResource
+from resources.user import UserListResource, UserResource, MeResource, UserRecipeListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
 
 def create_app():
@@ -23,16 +24,19 @@ def register_extensions(app):
     db.init_app(app)
     migrate = Migrate(app, db)
     jwt.init_app(app)
+    configure_uploads(app, image_set)
+    patch_request_class(app, 10 * 1024 * 1024)
 
-@jwt.token_in_blacklist_loader
-def check_if_token_in_blacklist(decrypted_token):
-    jti = decrypted_token['jti']
+    @jwt.token_in_blacklist_loader
+    def check_if_token_in_blacklist(decrypted_token):
+        jti = decrypted_token['jti']
 
-    return jti in black_list
+        return jti in black_list
 
 def register_resources(app):
     api = Api(app)
 
+    api.add_resource(UserAvatarUploadResource, '/users/avatar')
     api.add_resource(UserActivateResource, '/users/activate/<string:token>')
     api.add_resource(TokenResource, '/token')
     api.add_resource(RefreshResource, '/refresh')
