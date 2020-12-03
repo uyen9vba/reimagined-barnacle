@@ -19,3 +19,14 @@
 	letter-spacing: .2rem;
 	margin-right: 40px;
 }
+.popover {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #fff;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	top: 92%;
+	left: -50;
+}

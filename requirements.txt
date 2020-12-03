@@ -8,5 +8,5 @@ passlib==1.7.1
 Flask-JWT-Extended==3.20.0
 marshmallow==2.19.5
 webargs==5.4.0
-Flask-Uploads==0.2.1
-Pillow==6.2.1
+Flask-Uploads
+Pillow
