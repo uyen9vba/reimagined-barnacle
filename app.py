@@ -10,6 +10,7 @@ from resources.image import ImageListResource, ImageResource, ImagePublishResour
 from resources.user import UserListResource, UserResource, MeResource, UserImageListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -36,6 +37,18 @@ def register_extensions(app):
 def register_resources(app):
     api = Api(app)
 
+    @app.route('/')
+    def home():
+        return render_template('home.html')
+
+    @app.route('/<image>')
+    def show(image):
+        return render_template(f'{image}.html')
+
+    @app.route('/signup')
+    def signp():
+        return render_template('signup.html')
+
     api.add_resource(UserAvatarUploadResource, '/users/avatar')
     api.add_resource(UserActivateResource, '/users/activate/<string:token>')
     api.add_resource(TokenResource, '/token')
@@ -49,17 +62,6 @@ def register_resources(app):
     api.add_resource(ImageResource, '/images/<int:image_id>')
     api.add_resource(ImagePublishResource, '/images/<int:image_id>/publish')
 
-@app.route('/')
-def home():
-    return render_template('home.html')
-
-@app.route('/<image>')
-def show(image):
-    return render_template(f'frontend/{image}')
-
-@app.route('/signup')
-def signp():
-    return render_template('signup.html')
 
 if __name__ == '__main__':
     app = create_app()
