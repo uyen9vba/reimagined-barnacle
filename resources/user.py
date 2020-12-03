@@ -103,7 +103,7 @@ class UserImageListResource(Resource):
         else:
             visibility = 'public'
 
-        recipes = Recipe.get_all_by_user(user_id=user.id, visibility=visibility)
+        recipes = Image.get_all_by_user(user_id=user.id, visibility=visibility)
 
         return recipe_list_schema.dump(recipes).data, HTTPStatus.OK
 
