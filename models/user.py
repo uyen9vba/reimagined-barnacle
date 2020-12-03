@@ -15,7 +15,7 @@ class User(db.Model):
             onupdate=db.func.now())
     avatar_image = db.Column(db.String(100), default=None)
 
-    recipes = db.relationship('Recipe', backref='user')
+    images = db.relationship('Image', backref='user')
     
     @classmethod
     def get_by_username(cls, username):
