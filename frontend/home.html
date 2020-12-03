@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>{% block title %}{% endblock %} - Ihw</title>
+  <title>Home - Ihws</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -23,9 +23,14 @@
   <link rel="stylesheet" href="css/skeleton.css">
   <link rel="stylesheet" href="css/ihws.css">
 
+  <!-- Scripts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src'js/ihws.js'></script>
+
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="images/favicon.png">
+  <base href='http://localhost:5000/'>
 
 </head>
 <body>
@@ -35,19 +40,33 @@
   <div class="container">
     <div>
 	    <div class='row' style='margin-top: 5%'>
+		    <a class='button' href='home.html'>Home</a>
 		    <a class='button'>Gallery</a>
 		    <a class='button'>Upload</a>
 		    <a class='button'>Sign in</a>
-		    <a class='button'>Sign up</a>
+		    <a class='button' href='#' data-popover='#signup-popover'>Sign up</a>
+		    <div class='popover' id='signup-popover'>
+			    <form>
+				    <div class='six columns'>
+					    <label>Email</label>
+					    <input class='u-full-width' type='email'>
+				    </div>
+				    <div class='six columns'>
+					    <label>Username</label>
+					    <input class='u-full-width' type='text'>
+				    </div>
+				    <div class='six columns'>
+					    <label>Password</label>
+					    <input class='u-full-width' type='password'>
+				    </div>
+			    </form>
+		    </div>
 	    </div>
 	    <div style="margin-top: 5%">
-		    <h4>{% block title %}{% endblock %}</h4>
+		    <h4>Welcome to Ihsw</h4>
 	    </div>
 	    <div id="content">
-		    {%block image %}{% endblock %}
-	    </div>
-	    <div id="description" style="margin-top: 2%">
-		    <p>{% block descrtiption %}{% endblock %}</p>
+		    <img src="images/welcome.jpeg" class="image">
 	    </div>
     </div>
   </div>

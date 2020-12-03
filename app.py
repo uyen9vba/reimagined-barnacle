@@ -49,8 +49,13 @@ def register_resources(app):
     api.add_resource(ImageResource, '/images/<int:image_id>')
     api.add_resource(ImagePublishResource, '/images/<int:image_id>/publish')
 
+@app.route('/')
+def home():
+    return render_template('home.html')
 
-
+@app.route('/<image>')
+def show(image):
+    return render_template(f'frontend/{image}')
 
 
 if __name__ == '__main__':
