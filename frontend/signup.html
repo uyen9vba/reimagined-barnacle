@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Home - Ihws</title>
+  <title>Signup - Ihws</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -25,8 +25,8 @@
 
   <!-- Scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src'js/ihws.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src'js/ihws.js'></script>
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -44,15 +44,28 @@
 		    <a class='button'>Gallery</a>
 		    <a class='button'>Upload</a>
 		    <a class='button'>Sign in</a>
-		    <a class='button'>Sign up</a>
+		    <a class='button' href='signup.html'>Sign up</a>
 	    </div>
-	    <div style="margin-top: 5%">
-		    <h4>Welcome to Ihsw</h4>
-	    </div>
-	    <div id="content">
-		    <img src="images/welcome.jpeg" class="image">
-	    </div>
-    </div>
+	    <section class='header'>
+		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Sign up</h2>
+	    </section>
+	    <form id='signup' method='post' action='http://localhost:5000/users'> 
+	    	<div class='row'>
+		    	<div class='one-half column'>
+	    			<label>Username</label>
+    				<input class='u-full-width' type='text'>	
+			</div>
+			<div class='one-half column'>
+				<label>Password</label>
+				<input class='u-full-width' type='password'>
+			</div>
+	    	</div>
+		<div class'eight columns'>
+			<label>Your email</label>
+			<input class='u-full-width' type='email' placeholder='test@gmail.com'>
+	   	</div>
+		<input class='button-primary' type='submit' value='submit'>
+	    </form>
   </div>
 
 <!-- End Document

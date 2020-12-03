@@ -57,6 +57,9 @@ def home():
 def show(image):
     return render_template(f'frontend/{image}')
 
+@app.route('/signup')
+def signp():
+    return render_template('signup.html')
 
 if __name__ == '__main__':
     app = create_app()
