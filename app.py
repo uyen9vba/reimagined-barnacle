@@ -38,16 +38,24 @@ def register_resources(app):
     api = Api(app)
 
     @app.route('/')
-    def home():
-        return render_template('home.html')
+    def index():
+        return render_template('index.html')
 
     @app.route('/<image>')
-    def show(image):
+    def image(image):
         return render_template(f'{image}.html')
 
     @app.route('/signup')
-    def signp():
+    def signup():
         return render_template('signup.html')
+
+    @app.route('/signin')
+    def signin():
+        return render_template('signin.html')
+
+    @app.route('/upload')
+    def upload():
+        return render_template('upload.html')
 
     api.add_resource(UserAvatarUploadResource, '/users/avatar')
     api.add_resource(UserActivateResource, '/users/activate/<string:token>')
