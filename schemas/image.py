@@ -11,6 +11,7 @@ class ImageSchema(Schema):
     description = fields.String(validate=[validate.Length(max=200)])
 
     is_publish = fields.Boolean(dump_only=True)
+    cover_url = fields.Method(serialize='dump_cover_url')
 
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
@@ -24,3 +25,9 @@ class ImageSchema(Schema):
             return {'data': data}
 
         return data
+
+    def dump_cover_url(self, image):
+        if image.cover_image:
+            return url_for('static', filename='images/images/{}'.format(image.cover_image), _external=True)
+        else:
+            return url_for('static', filename='images/assets/default-image-cover.jpg', _external=True)

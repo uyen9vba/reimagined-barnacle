@@ -6,7 +6,7 @@ from flask_uploads import configure_uploads, patch_request_class
 from config import Config
 from extensions import db, jwt, image_set
 from models.user import User
-from resources.image import ImageListResource, ImageResource, ImagePublishResource
+from resources.image import ImageListResource, ImageResource, ImagePublishResource, ImageCoverUploadResource
 from resources.user import UserListResource, UserResource, MeResource, UserImageListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
 
@@ -57,6 +57,7 @@ def register_resources(app):
     def upload():
         return render_template('upload.html')
 
+    api.add_resource(ImageCoverUploadResource, '/images/<int:image_id>/cover')
     api.add_resource(UserAvatarUploadResource, '/users/avatar')
     api.add_resource(UserActivateResource, '/users/activate/<string:token>')
     api.add_resource(TokenResource, '/token')
