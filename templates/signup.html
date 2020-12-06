@@ -49,20 +49,20 @@
 	    <section class='header'>
 		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Sign up</h2>
 	    </section>
-	    <form id='signup' method='post' action='http://localhost:5000/users'> 
+	    <form id='signup'> 
 	    	<div class='row'>
 		    	<div class='one-half column'>
 	    			<label>Username</label>
-    				<input class='u-full-width' type='text'>	
+    				<input class='u-full-width' type='text' name='username'>	
 			</div>
 			<div class='one-half column'>
 				<label>Password</label>
-				<input class='u-full-width' type='password'>
+				<input class='u-full-width' type='password' name='password'>
 			</div>
 	    	</div>
 		<div class'eight columns'>
 			<label>Your email</label>
-			<input class='u-full-width' type='email' placeholder='test@gmail.com'>
+			<input class='u-full-width' type='email' placeholder='test@gmail.com' name='email'>
 	   	</div>
 		<input class='button-primary' type='submit' value='submit'>
 	    </form>

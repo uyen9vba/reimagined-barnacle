@@ -49,15 +49,16 @@
 	    <section class='header'>
 		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Upload an image</h2>
 	    </section>
-	    <form id='upload' method='post' action='http://localhost:5000/images'>
+	    <form id='upload'>
 		    <label>Select a file:</label>
-		    <input class='u-full-width'  type='file'>
+		    <input class='u-full-width'  type='file' name='file'>
 		    <label>Name</label>
 		    <div class='row'>
-			    <input class='six columns' type='text'>
+			    <input class='six columns' type='text' name='name'>
 		    </div>
 		    <label>Description</label>
-		    <textarea class='u-full-width' placeholder='Describe your image...'></textarea>
+		    <textarea class='u-full-width' placeholder='Describe your image...' name='description'>
+		    </textarea>
     		    <input class='button-primary' type='submit' value='upload'>
 	    </form>
   </div>
