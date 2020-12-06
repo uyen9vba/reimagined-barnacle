@@ -12,4 +12,9 @@ $('signup').on('submit', function(event) {
 	console.log(json);
 });
 
+$('upload').on('submit', function(event) {
+	const http = new XMLHttpRequest();
+	const url = 'http://localhost:5000/images';
 
+	http.open('POST', url);
+	http.send();
