@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from http import HTTPStatus
 from flask_jwt_extended import get_jwt_identity, jwt_required, jwt_optional
+import jinja2
 
 from models.image import Image
 from schemas.image import ImageSchema
@@ -15,6 +16,8 @@ image_schema = ImageSchema()
 image_list_schema = ImageSchema(many=True)
 image_cover_schema = ImageSchema(only=('cover_url', ))
 
+path_to_templates = 'C:/Users/Jone/Desktop/Working file/templates'
+
 class ImageListResource(Resource):
     def get(self):
         images = Image.get_all_published()
@@ -24,6 +27,9 @@ class ImageListResource(Resource):
     @jwt_required
     def post(self):
         json_data = request.get_json()
+
+        name = json_data['name']
+        description = json_data['description']
 
         current_user = get_jwt_identity()
 
@@ -35,6 +41,20 @@ class ImageListResource(Resource):
         image = Image(**data)
         image.user_id = current_user
         image.save()
+
+        jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
+
+        jinja_var = {
+            'title': name,
+            'name' : name,
+            'description': description
+        }
+
+        template = jinja_env.get_template('imagecontent.html')
+        output = template.render(title=jinja_var['name'], name=jinja_var['name'], image='raccoon', description=jinja_var['description'])
+
+        with open(path_to_templates + "/" + name + ".html", "w") as fh:
+            fh.write(output)
 
         return image_schema.dump(image).data, HTTPStatus.CREATED
 
@@ -168,3 +188,5 @@ class ImageCoverUploadResource(Resource):
         image.save()
 
         return image_cover_schema.dump(image).data, HTTPStatus.OK
+
+
