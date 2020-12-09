@@ -24,9 +24,8 @@ def verify_token(token, max_age=(30 * 60), salt=None):
 
     return email
 
-def save_image(image, folder):
+def save_image(image, folder, filename):
 
-    filename = '{}.{}'.format(uuid.uuid4(), extension(image.filename))
     image_set.save(image, folder=folder, name=filename)
 
     return filename

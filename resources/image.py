@@ -30,6 +30,7 @@ class ImageListResource(Resource):
 
         name = json_data['name']
         description = json_data['description']
+        filename = json_data['filename']
 
         current_user = get_jwt_identity()
 
@@ -47,13 +48,14 @@ class ImageListResource(Resource):
         jinja_var = {
             'title': name,
             'name' : name,
-            'description': description
+            'description': description,
+            'image': filename
         }
 
         template = jinja_env.get_template('imagecontent.html')
-        output = template.render(title=jinja_var['name'], name=jinja_var['name'], image='raccoon', description=jinja_var['description'])
+        output = template.render(title=jinja_var['name'], name=jinja_var['name'],image=jinja_var['image'],description=jinja_var['description'])
 
-        with open(path_to_templates + "/" + name + ".html", "w") as fh:
+        with open(path_to_templates + "/" + filename + ".html", "w") as fh:
             fh.write(output)
 
         return image_schema.dump(image).data, HTTPStatus.CREATED
@@ -182,7 +184,7 @@ class ImageCoverUploadResource(Resource):
             if os.path.exists(cover_path):
                 os.remove(cover_path)
 
-        filename = save_image(image=file, folder='images')
+        filename = save_image(image=file, folder='assets', filename=file.filename)
 
         image.cover_image = filename
         image.save()
