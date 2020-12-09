@@ -20,7 +20,10 @@ class TokenResource(Resource):
         if not user or not check_password(password, user.password):
             return {'message': 'email or password is incorrect'}, HTTPStatus.UNAUTHORIZED
 
-        access_token = create_access_token(identity=user.id)
+        if user.is_active is False:
+            return {'message': 'The user account is not activated yet'}, HTTPStatus.FORBIDDEN
+
+        access_token = create_access_token(identity=user.id, fresh=True)
         refresh_token = create_refresh_token(identity=user.id)
 
         return {'access_token': access_token, 'refresh_token': refresh_token}, HTTPStatus.OK
@@ -30,9 +33,9 @@ class RefreshResource(Resource):
     def post(self):
         current_user = get_jwt_identity()
 
-        access_token = create_access_token(identity=current_user, fresh=False)
+        token = create_access_token(identity=current_user, fresh=False)
 
-        return {'access_token': access_token}, HTTPStatus.OK
+        return {'token': token}, HTTPStatus.OK
 
 class RevokeResource(Resource):
     @jwt_required
