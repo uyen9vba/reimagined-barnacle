@@ -1,42 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-  <title>Signup - Ihws</title>
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="../static/normalize.css">
-  <link rel="stylesheet" href="../static/skeleton.css">
-  <link rel="stylesheet" href="../static/ihws.css">
-
-  <!-- Scripts
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src='../static/ihws.js'></script>
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="../static/images/assets/favicon.png">
-
+	<meta charset="utf-8">
+	<title>Signin - Ihws</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../static/normalize.css">
+	<link rel="stylesheet" href="../static/skeleton.css">
+	<link rel="stylesheet" href="../static/ihws.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="../static/ihws.js"></script>
+	<link rel="icon" type="image/png" href="../static/images/assets/favicon.png">
 </head>
 <body>
-
-  <!-- Primary Page Layout
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div class="container">
     <div>
 	    <div class='row' style='margin-top: 5%'>
@@ -49,7 +27,7 @@
 	    <section class='header'>
 		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Sign in</h2>
 	    </section>
-	    <form id='signin'> 
+	    <form onsubmit='signin()'>
 	    	<div class='row'>
 		    	<div class='one-half column'>
 	    			<label>Your email</label>
@@ -60,11 +38,8 @@
 				<input id='password' class='u-full-width' type='password'>
 			</div>
 	    	</div>
-		<input class='button-primary' type='submit' value='submit'>
+		<input class='button-primary' value='Sing in' type='submit'>
 	    </form>
   </div>
-
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 </html>

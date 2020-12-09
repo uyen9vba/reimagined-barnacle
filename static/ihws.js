@@ -7,6 +7,8 @@ $('signup').on('submit', function(event) {
 		password = $form.find("input[name='password']"),
 		email = $form.find("input[name='email']");
 
+	alert("DONE");
+
 	$ajax({
 		url: 'http://localhost:5000/users',
 		method: 'POST',
@@ -15,27 +17,19 @@ $('signup').on('submit', function(event) {
 	});
 });
 
-$('signin').on('submit', function(event) {
-	event.preventDefault();
+function signin() {
+	var data = {
+		"email": document.getElementById("email").value,
+		"password": document.getElementById("password").value
+	};
+	
+	alert("Done");
 
-	email = document.getElementById('email').value;
-	password = document.getElementById('password').value;
-
-	alert('done');
-
-	var settings = {
-		url: 'http://localhost:5000/token',
-		method: 'POST',
-		timeout: 0,
-		data: {"email": email, "password": password}};
-
-	request = $.ajax(settings);
-
-	request.done(function(msg) {
-		alert('Done');
-	});
-
-});
+	const xmlHttpRequest = new XMLHttpRequest();
+	const url = 'http://localhost:5000/token';
+	xmlHttpRequest.open("POST", url);
+	xmlHttpRequest.send(data);
+}
 
 $('upload').submit(function(event) {
 	event.preventDefault();
