@@ -2,7 +2,7 @@ class Config:
     DEBUG = True
 
 
-    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://jondatabase:cykablyat3@localhost/instructor'
+    SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:postgres@localhost/ihws'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     SECRET_KEY = 'secret-key-not-known-222-1'

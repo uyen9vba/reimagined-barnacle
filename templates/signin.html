@@ -25,8 +25,8 @@
 
   <!-- Scripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src'..static/ihws.js'></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src='../static/ihws.js'></script>
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -49,15 +49,15 @@
 	    <section class='header'>
 		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Sign in</h2>
 	    </section>
-	    <form id='signup' method='post' action='http://localhost:5000/users'> 
+	    <form id='signin'> 
 	    	<div class='row'>
 		    	<div class='one-half column'>
 	    			<label>Your email</label>
-    				<input class='u-full-width' type='email' placeholder='test@gmail.com'>	
+    				<input id='email' class='u-full-width' type='email' placeholder='test@gmail.com'>	
 			</div>
 			<div class='one-half column'>
 				<label>Password</label>
-				<input class='u-full-width' type='password'>
+				<input id='password' class='u-full-width' type='password'>
 			</div>
 	    	</div>
 		<input class='button-primary' type='submit' value='submit'>

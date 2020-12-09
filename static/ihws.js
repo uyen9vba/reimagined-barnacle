@@ -8,9 +8,33 @@ $('signup').on('submit', function(event) {
 		email = $form.find("input[name='email']");
 
 	$ajax({
-		method: 'POST',
 		url: 'http://localhost:5000/users',
-		data: {username: username, password: password, email: email}});
+		method: 'POST',
+		timeout: 0,
+		data: {"username": username, "password": password, "email": email}
+	});
+});
+
+$('signin').on('submit', function(event) {
+	event.preventDefault();
+
+	email = document.getElementById('email').value;
+	password = document.getElementById('password').value;
+
+	alert('done');
+
+	var settings = {
+		url: 'http://localhost:5000/token',
+		method: 'POST',
+		timeout: 0,
+		data: {"email": email, "password": password}};
+
+	request = $.ajax(settings);
+
+	request.done(function(msg) {
+		alert('Done');
+	});
+
 });
 
 $('upload').submit(function(event) {
