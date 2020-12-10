@@ -22,10 +22,9 @@ function signup() {
 		"email": document.getElementById("email").value
 	});
 
-	$.ajax(url='/users', settings={
+	$.ajax(url='http://localhost:5000/users', settings={
 		method: 'POST',
-		data: data,
-		dataType: 'json'
+		data: data
 	});
 }
 
@@ -35,8 +34,6 @@ function upload() {
 		"description": document.getElementById("description").value,
 		"filename": document.getElementById("file").value
 	});
-
-	alert(data);
 
 	$.ajax(url='http://localhost:5000/images', settings={
 		method: 'POST',
