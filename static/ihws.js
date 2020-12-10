@@ -7,11 +7,29 @@ $('signup').on('submit', function(event) {
 		password = $form.find("input[name='password']"),
 		email = $form.find("input[name='email']");
 
+	alert("DONE");
+
 	$ajax({
-		method: 'POST',
 		url: 'http://localhost:5000/users',
-		data: {username: username, password: password, email: email}});
+		method: 'POST',
+		timeout: 0,
+		data: {"username": username, "password": password, "email": email}
+	});
 });
+
+function signin() {
+	var data = {
+		"email": document.getElementById("email").value,
+		"password": document.getElementById("password").value
+	};
+	
+	alert("Done");
+
+	const xmlHttpRequest = new XMLHttpRequest();
+	const url = 'http://localhost:5000/token';
+	xmlHttpRequest.open("POST", url);
+	xmlHttpRequest.send(data);
+}
 
 $('upload').submit(function(event) {
 	event.preventDefault();

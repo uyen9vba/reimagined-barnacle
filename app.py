@@ -41,10 +41,6 @@ def register_resources(app):
     def index():
         return render_template('index.html')
 
-    @app.route('/<image>')
-    def image(image):
-        return render_template(f'{image}.html')
-
     @app.route('/signup')
     def signup():
         return render_template('signup.html')
@@ -56,6 +52,10 @@ def register_resources(app):
     @app.route('/upload')
     def upload():
         return render_template('upload.html')
+
+    @app.route('/<image>')
+    def image(image):
+        return render_template(f'{image}.html')
 
     api.add_resource(ImageCoverUploadResource, '/images/<int:image_id>/cover')
     api.add_resource(UserAvatarUploadResource, '/users/avatar')
