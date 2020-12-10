@@ -1,52 +1,46 @@
 
-$('signup').on('submit', function(event) {
-	event.preventDefault();
-
-	var $form = $(this),
-		username = $form.find("input[name='username']"),
-		password = $form.find("input[name='password']"),
-		email = $form.find("input[name='email']");
-
-	alert("DONE");
-
-	$ajax({
-		url: 'http://localhost:5000/users',
-		method: 'POST',
-		timeout: 0,
-		data: {"username": username, "password": password, "email": email}
-	});
-});
+var token;
 
 function signin() {
-	var data = {
+	var data = JSON.stringify({
 		"email": document.getElementById("email").value,
 		"password": document.getElementById("password").value
-	};
+	});
 	
-	alert("Done");
-
-	const xmlHttpRequest = new XMLHttpRequest();
-	const url = 'http://localhost:5000/token';
-	xmlHttpRequest.open("POST", url);
-	xmlHttpRequest.send(data);
+	$.ajax(url='http://localhost:5000/token', settings={
+		method: 'POST',
+		data: data
+	}).always(function() {
+		alert(data);
+	});
 }
 
-$('upload').submit(function(event) {
-	event.preventDefault();
+function signup() {
+	var data = JSON.stringify({
+		"username": document.getElementById("username").value,
+		"password": document.getElementById("password").value,
+		"email": document.getElementById("email").value
+	});
 
-	var $form = $(this),
-		file = $form.find("input[name='file']"),
-		name = $form.find("input[name='name']").val(),
-		description = $form.find("input[name='description']").val();
-	
-	var result = $ajax({
+	$.ajax(url='/users', settings={
 		method: 'POST',
-		url: 'http://localhost:5000/images',
-		data: {name: name, description: description},
-		dataType: 'json'});
+		data: data,
+		dataType: 'json'
+	});
+}
 
-	$ajax({
-		method: 'PUT',
-		url: 'http://localhost:5000/images/' + result.id + '/cover',
-		data: new FormData(file)});
-});
+function upload() {
+	var data = JSON.stringify({
+		"name": document.getElementById("name").value,
+		"description": document.getElementById("description").value,
+		"filename": document.getElementById("file").value
+	});
+
+	alert(data);
+
+	$.ajax(url='http://localhost:5000/images', settings={
+		method: 'POST',
+		data: data,
+		headers: {"Authorization": token}
+	});
+}
