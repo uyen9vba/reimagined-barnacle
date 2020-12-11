@@ -1,7 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session, redirect, url_for, request, Response, flash
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_uploads import configure_uploads, patch_request_class
+from markupsafe import escape
+import requests
+import json
 
 from config import Config
 from extensions import db, jwt, image_set
@@ -10,9 +13,11 @@ from resources.image import ImageListResource, ImageResource, ImagePublishResour
 from resources.user import UserListResource, UserResource, MeResource, UserImageListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
 
+token = None
 
 def create_app():
     app = Flask(__name__)
+    app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
     app.config.from_object(Config)
 
     register_extensions(app)
@@ -39,19 +44,70 @@ def register_resources(app):
 
     @app.route('/')
     def index():
+        if 'email' in session:
+            pass
+
         return render_template('index.html')
 
-    @app.route('/signup', methods=['GET', 'POST'])
+    @app.route('/signup', methods=['POST'])
     def signup():
-        return render_template('signup.html')
+        render_template('signup.html')
+
+        if request.method == 'POST':
+            requests.post(
+                    url='http://localhost:5000/users',
+                    json={
+                        'email': request.form['email'],
+                        'username': request.form['username'],
+                        'password': request.form['password']}
+                    )
+            return redirect(url_for('index'))
 
     @app.route('/signin', methods=['POST'])
     def signin():
-        return render_template('signin.html')
+        render_template('signin.html')
+
+        if request.method == 'POST':
+            session['email'] = request.form['email']
+            session['password'] = request.form['password']
+
+            response = requests.post(
+                    url='http://localhost:5000/token',
+                    json={
+                        'email': request.form['email'],
+                        'password': request.form['password']}
+                    )
+
+            print(response.json)
+
+            token = response.json
+
+            return redirect(url_for('index'))
 
     @app.route('/upload', methods=['POST', 'PUT'])
     def upload():
-        return render_template('upload.html')
+        render_template('upload.html')
+
+        if request.method == 'POST':
+            if 'file' not in request.files:
+                flash('No files')
+
+                return redirect(request.url)
+
+            file = request.files['file']
+
+            if file.filename == '':
+                flash('No selected file')
+
+                return redirect(request.url)
+
+            requests.post(
+                    url='http://localhost:5000/images',
+                    json={
+                        'name': request.form['name'],
+                        'description': request.form['description']}
+                    )
+
 
     @app.route('/<image>')
     def image(image):
