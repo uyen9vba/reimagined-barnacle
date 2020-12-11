@@ -8,8 +8,11 @@ function signin() {
 	});
 
 	$.ajax(url='http://localhost:5000/token', settings={
-		method: 'POST',
-		data: data
+		type: 'POST',
+		data: data,
+		processData: false,
+		contentType: 'application/json',
+		dataType: 'json'
 	}).always(function(json) {
 		alert(json);
 		token = json[0];
@@ -25,9 +28,13 @@ function signup() {
 
 	alert(data);
 
-	$.ajax(url='http://localhost:5000/users', settings={
-		method: 'POST',
-		data: data
+	$.ajax({
+		url: 'http://localhost:5000/users',
+		type: 'POST',
+		data: data,
+		processData: false,
+		contentType: 'application/json',
+		dataType: 'json'
 	});
 }
 
@@ -40,9 +47,24 @@ function upload() {
 
 	alert(data);
 
+	var id;
+
 	$.ajax(url='http://localhost:5000/images', settings={
-		method: 'POST',
+		type: 'POST',
 		data: data,
-		headers: {"Authorization": token}
+		headers: {Authorization: token}
+	}).always(function(json) {
+		id = json['id'];
+	});
+
+	var formData = new FormData();
+	formData.append('file', input.files[0]);
+
+	$.ajax(url='http://localhost:5000/images/' + id + '/cover', settings={
+		type: 'PUT',
+		data: formData,
+		contentType: 'multipart/form-data',
+		mimeType: 'multipart/form-data',
+		headers: {Authorization: token}
 	});
 }
