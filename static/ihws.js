@@ -9,10 +9,7 @@ function signin() {
 
 	$.ajax(url='http://localhost:5000/token', settings={
 		type: 'POST',
-		data: data,
-		processData: false,
-		contentType: 'application/json',
-		dataType: 'json'
+		data: data
 	}).always(function(json) {
 		alert(json);
 		token = json[0];
@@ -21,9 +18,9 @@ function signin() {
 
 function signup() {
 	var data = JSON.stringify({
-		"username": document.getElementById("username").value,
-		"password": document.getElementById("password").value,
-		"email": document.getElementById("email").value
+		username: document.getElementById("username").value,
+		password: document.getElementById("password").value,
+		email: document.getElementById("email").value
 	});
 
 	alert(data);
@@ -31,10 +28,7 @@ function signup() {
 	$.ajax({
 		url: 'http://localhost:5000/users',
 		type: 'POST',
-		data: data,
-		processData: false,
-		contentType: 'application/json',
-		dataType: 'json'
+		data: data
 	});
 }
 
