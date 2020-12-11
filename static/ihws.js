@@ -26,7 +26,7 @@ function signup() {
 	alert(data);
 
 	$.ajax({
-		url: 'http://localhost:5000/users',
+		url: '/users',
 		type: 'POST',
 		data: data
 	});
