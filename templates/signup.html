@@ -10,13 +10,10 @@
 	<link rel="stylesheet" href="../static/normalize.css">
 	<link rel="stylesheet" href="../static/skeleton.css">
 	<link rel="stylesheet" href="../static/ihws.css">
-	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-	<script src="../static/ihws.js"></script>
 	<link rel="icon" type="image/png" href="../static/images/assets/favicon.png">
 </head>
 <body>
   <div class="container">
-    <div>
 	    <div class='row' style='margin-top: 5%'>
 		    <a class='button' href='/'>Home</a>
 		    <a class='button' href='/gallery'>Gallery</a>
@@ -25,22 +22,22 @@
 		    <a class='button' href='/signup'>Sign up</a>
 	    </div>
 	    <section class='header'>
-		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Sign up</h2>
+		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Sign up</h4>
 	    </section>
-	    <form onsubmit='signup()'> 
+	    <form method='post'> 
 	    	<div class='row'>
 		    	<div class='one-half column'>
 	    			<label>Username</label>
-    				<input id='username' class='u-full-width' type='text'>	
+    				<input name='username' class='u-full-width' type='text'>	
 			</div>
 			<div class='one-half column'>
 				<label>Password</label>
-				<input id='password' class='u-full-width' type='password'>
+				<input name='password' class='u-full-width' type='password'>
 			</div>
 	    	</div>
 		<div class'eight columns'>
 			<label>Your email</label>
-			<input id='email' class='u-full-width' type='email'>
+			<input name='email' class='u-full-width' type='email'>
 	   	</div>
 		<input class='button-primary' type='submit' value='Sing up'>
 	    </form>
