@@ -41,15 +41,15 @@ def register_resources(app):
     def index():
         return render_template('index.html')
 
-    @app.route('/signup')
+    @app.route('/signup', methods=['GET', 'POST'])
     def signup():
         return render_template('signup.html')
 
-    @app.route('/signin')
+    @app.route('/signin', methods=['POST'])
     def signin():
         return render_template('signin.html')
 
-    @app.route('/upload')
+    @app.route('/upload', methods=['POST', 'PUT'])
     def upload():
         return render_template('upload.html')
 
