@@ -9,6 +9,9 @@ def hash_password(password):
     return pbkdf2_sha256.hash(password)
 
 def check_password(password, hashed):
+    #a = pbkdf2_sha256.hash(password)
+    #pbkdf2_sha256.identify(a)
+    
     return pbkdf2_sha256.verify(password, hashed)
 
 def generate_token(email, salt=None):
