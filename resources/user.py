@@ -5,10 +5,9 @@ from flask_jwt_extended import jwt_optional, get_jwt_identity, jwt_required
 from webargs import fields
 from webargs.flaskparser import use_kwargs
 from mailgun import MailgunApi
-from utils import generate_token, verify_token
+from utils import generate_token, verify_token, hash_password, save_image
 import os
 from extensions import image_set
-from utils import hash_password, generate_token, verify_token, save_image
 from models.user import User
 from models.image import Image
 from schemas.user import UserSchema
@@ -52,13 +51,14 @@ class UserListResource(Resource):
                        token=token,
                        _external=True)
 
-        text = 'Hi, Thanks for using ImageApp! Please confirm your registration by clicking on the link: {}'.format(link)
-
-        mailgun.send_email(to=user.email,
+        text = 'Please confirm your registration by clicking on the link: {}'.format(link)
+        
+        response = mailgun.send_email(to=user.email,
                            subject=subject,
                            text=text,
                            html=render_template('email/confirmation.html', link=link))
 
+        print(response)
 
         return user_schema.dump(user).data, HTTPStatus.CREATED
 
