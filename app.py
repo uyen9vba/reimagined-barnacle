@@ -1,11 +1,11 @@
-from flask import Flask, render_template, session, redirect, url_for, request, Response, flash
+from flask import Flask, render_template, session, redirect, url_for, request, Response, flash, send_from_directory
 from flask_migrate import Migrate
 from flask_restful import Api
 from flask_uploads import configure_uploads, patch_request_class
 from markupsafe import escape
 import requests
 import json
-
+import os
 from config import Config
 from extensions import db, jwt, image_set
 from models.user import User
@@ -121,6 +121,12 @@ def register_resources(app):
                     headers={'Authorization': access_token},
                     files={'file': file}
                     )
+
+
+    @app.route('/gallery')
+    def get_gallery():
+       image_names = os.listdir('./static/images/pictures')
+       return render_template("gallery.html", image_names=image_names)
 
 
     @app.route('/<image>')

@@ -183,7 +183,7 @@ class ImageCoverUploadResource(Resource):
             if os.path.exists(cover_path):
                 os.remove(cover_path)
 
-        filename = save_image(image=file, folder='assets', filename=file.filename)
+        filename = save_image(image=file, folder='pictures', filename=file.filename)
 
         image.cover_image = filename
         image.save()
