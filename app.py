@@ -13,7 +13,7 @@ from resources.image import ImageListResource, ImageResource, ImagePublishResour
 from resources.user import UserListResource, UserResource, MeResource, UserImageListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
 
-token = None
+access_token = None
 
 def create_app():
     app = Flask(__name__)
@@ -77,10 +77,11 @@ def register_resources(app):
                         'email': request.form['email'],
                         'password': request.form['password']}
                     )
+            json = response.json()
+            print(json)
 
-            print(response.json)
-
-            token = response.json
+            access_token = json['access_token']
+            print(access_token)
 
             return redirect(url_for('index'))
 
@@ -89,10 +90,12 @@ def register_resources(app):
         render_template('upload.html')
 
         if request.method == 'POST':
+            '''
             if 'file' not in request.files:
                 flash('No files')
 
                 return redirect(request.url)
+            '''
 
             file = request.files['file']
 
@@ -101,11 +104,22 @@ def register_resources(app):
 
                 return redirect(request.url)
 
-            requests.post(
+            response = requests.post(
                     url='http://localhost:5000/images',
+                    headers={'Authorization': access_token},
                     json={
                         'name': request.form['name'],
-                        'description': request.form['description']}
+                        'description': request.form['description'],
+                        'filename': file.filename}
+                    )
+            json = response.json()
+            print(json)
+            image_id = json['id']
+
+            requests.put(
+                    url='http://localhost:5000/' + image_id + '/cover',
+                    headers={'Authorization': access_token},
+                    files={'file': file}
                     )
 
 

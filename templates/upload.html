@@ -26,15 +26,15 @@
 	    <section class='header'>
 		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Upload an image</h2>
 	    </section>
-	    <form onsubmit='upload()'>
+	    <form method='post' enctype='multipart/form-data'>
 		    <label>Select a file:</label>
-		    <input id='file' class='u-full-width'  type='file'>
+		    <input name='file' class='u-full-width'  type='file'>
 		    <label>Name</label>
 		    <div class='row'>
-			    <input id='name' class='six columns' type='text'>
+			    <input name='name' class='six columns' type='text'>
 		    </div>
 		    <label>Description</label>
-		    <textarea id='description' class='u-full-width'>
+		    <textarea name='description' class='u-full-width'>
 		    </textarea>
     		    <input class='button-primary' type='submit' value='upload'>
 	    </form>

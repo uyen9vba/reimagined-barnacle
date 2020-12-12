@@ -52,8 +52,7 @@ class UserListResource(Resource):
                        token=token,
                        _external=True)
 
-        text = 'Hi, Thanks for using ImageApp! Please confirm your registration by clicking on the link: {}'.format(
-            link)
+        text = 'Hi, Thanks for using ImageApp! Please confirm your registration by clicking on the link: {}'.format(link)
 
         mailgun.send_email(to=user.email,
                            subject=subject,
