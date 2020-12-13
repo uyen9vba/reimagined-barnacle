@@ -28,3 +28,10 @@ class MailgunApi:
                                  data=data)
 
         return response
+
+
+mailgun = MailgunApi(
+        domain='sandbox749fb8378fb742fc96c63cac6e8a9262.mailgun.org',
+        api_key='503eb1d814399102463dddbebfadcc00-4879ff27-a1ae696c')
+
+
