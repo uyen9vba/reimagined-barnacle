@@ -3,9 +3,9 @@
 
 
 {%block image %}
-{% for image in image_names %}
+{% for image_name in image_names %}
 
-<img class='image' src="./static/images/pictures/dog.jpg">
+<img class='image' src="./static/images/pictures/{{ image_name }}">
 
 {% endfor %}
 {% endblock %}
