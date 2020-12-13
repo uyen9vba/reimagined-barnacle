@@ -52,7 +52,7 @@ class ImageListResource(Resource):
         }
 
         template = jinja_env.get_template('imagecontent.html')
-        output = template.render(title=jinja_var['name'], name=jinja_var['name'],image=jinja_var['image'],description=jinja_var['description'])
+        output = template.render(title=jinja_var['name'], name=jinja_var['name'],description=jinja_var['description'])
 
         with open(path_to_templates + "/" + filename + ".html", "w") as fh:
             fh.write(output)

@@ -5,7 +5,12 @@
 {%block image %}
 {% for image_name in image_names %}
 
-<img class='image' src="./static/images/pictures/{{ image_name }}">
+
+<a target="_blank" href="/">
+  <img src="./static/images/pictures/{{ image_name }}" alt="Avatar" class="image">
+</a>
+
+
 
 {% endfor %}
 {% endblock %}

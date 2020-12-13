@@ -13,7 +13,7 @@ from resources.image import ImageListResource, ImageResource, ImagePublishResour
 from resources.user import UserListResource, UserResource, MeResource, UserImageListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
 
-access_token = None
+
 
 def create_app():
     app = Flask(__name__)
@@ -63,6 +63,9 @@ def register_resources(app):
                     )
             return redirect(url_for('index'))
 
+
+    access_token = ""
+
     @app.route('/signin', methods=['POST'])
     def signin():
         render_template('signin.html')
@@ -78,12 +81,16 @@ def register_resources(app):
                         'password': request.form['password']}
                     )
             json = response.json()
-            print(json)
+            print(json['access_token'])
 
-            access_token = json['access_token']
-            print(access_token)
+            session['access_token'] = json['access_token']
+
+
 
             return redirect(url_for('index'))
+
+
+
 
     @app.route('/upload', methods=['POST', 'PUT'])
     def upload():
@@ -104,9 +111,11 @@ def register_resources(app):
 
                 return redirect(request.url)
 
+            print(str(session['access_token']))
+
             response = requests.post(
                     url='http://localhost:5000/images',
-                    headers={'Authorization': access_token},
+                    headers={'Authorization': 'Bearer ' + str(session['access_token'])},
                     json={
                         'name': request.form['name'],
                         'description': request.form['description'],
@@ -115,10 +124,11 @@ def register_resources(app):
             json = response.json()
             print(json)
             image_id = json['id']
+            print(image_id)
 
             requests.put(
-                    url='http://localhost:5000/' + image_id + '/cover',
-                    headers={'Authorization': access_token},
+                    url='http://localhost:5000/' + str(image_id) + '/cover',
+                    headers={'Authorization': 'Bearer ' + str(session['access_token'])},
                     files={'file': file}
                     )
 
