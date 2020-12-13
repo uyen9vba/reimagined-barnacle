@@ -124,12 +124,13 @@ def register_resources(app):
             json = response.json()
             print(json)
             image_id = json['id']
-            print(image_id)
+
+            files = {'file': open(file.filename, 'rb')}
 
             requests.put(
                     url='http://localhost:5000/' + str(image_id) + '/cover',
                     headers={'Authorization': 'Bearer ' + str(session['access_token'])},
-                    files={'file': file}
+                    files= files
                     )
 
 
