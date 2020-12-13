@@ -16,7 +16,6 @@ image_schema = ImageSchema()
 image_list_schema = ImageSchema(many=True)
 image_cover_schema = ImageSchema(only=('cover_url', ))
 
-path_to_templates = 'C:/Users/Jone/Desktop/Working file/templates'
 
 class ImageListResource(Resource):
     def get(self):
@@ -53,8 +52,9 @@ class ImageListResource(Resource):
 
         template = jinja_env.get_template('imagecontent.html')
         output = template.render(title=jinja_var['name'], name=jinja_var['name'],description=jinja_var['description'])
+        print(os.getcwd())
 
-        with open(path_to_templates + "/" + filename + ".html", "w") as fh:
+        with open(os.getcwd() + "/" + filename + ".html", "w") as fh:
             fh.write(output)
 
         return image_schema.dump(image).data, HTTPStatus.CREATED

@@ -1,18 +1,21 @@
 from flask import Flask, render_template, session, redirect, url_for, request, Response, flash, send_from_directory
 from flask_migrate import Migrate
+from http import HTTPStatus
 from flask_restful import Api
 from flask_uploads import configure_uploads, patch_request_class
+from flask_jwt_extended import get_jwt_identity
 from markupsafe import escape
 import requests
 import json
 import os
 from config import Config
 from extensions import db, jwt, image_set
+from models.image import Image
 from models.user import User
 from resources.image import ImageListResource, ImageResource, ImagePublishResource, ImageCoverUploadResource
 from resources.user import UserListResource, UserResource, MeResource, UserImageListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
-
+from utils import save_image
 
 
 def create_app():
@@ -97,19 +100,20 @@ def register_resources(app):
         render_template('upload.html')
 
         if request.method == 'POST':
-            '''
             if 'file' not in request.files:
-                flash('No files')
+                print('No files')
 
                 return redirect(request.url)
-            '''
 
             file = request.files['file']
+            print(file)
 
             if file.filename == '':
-                flash('No selected file')
+                print('No selected file')
 
                 return redirect(request.url)
+
+            file.save(os.path.join('static/images/pictures', file.filename))
 
             print(str(session['access_token']))
 
@@ -124,16 +128,18 @@ def register_resources(app):
             json = response.json()
             print(json)
             image_id = json['id']
-
-            files = {'file': open(file.filename, 'rb')}
+            '''
+            files = {'file': open(os.getcwd() + file.filename, 'rb')}
 
             requests.put(
                     url='http://localhost:5000/' + str(image_id) + '/cover',
                     headers={'Authorization': 'Bearer ' + str(session['access_token'])},
-                    files= files
+                    files=files
                     )
+            '''
 
-
+        return redirect(url_for('index'))
+        
     @app.route('/gallery')
     def get_gallery():
        image_names = os.listdir('./static/images/pictures')
