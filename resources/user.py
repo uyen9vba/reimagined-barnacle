@@ -4,7 +4,7 @@ from http import HTTPStatus
 from flask_jwt_extended import jwt_optional, get_jwt_identity, jwt_required
 from webargs import fields
 from webargs.flaskparser import use_kwargs
-from mailgun import MailgunApi
+from mailgun import mailgun
 from utils import generate_token, verify_token, hash_password, save_image
 import os
 from extensions import image_set
@@ -19,10 +19,6 @@ user_avatar_schema = UserSchema(only=('avatar_url', ))
 
 recipe_list_schema = ImageSchema(many=True)
 
-
-
-mailgun = MailgunApi(domain=os.environ.get('MAILGUN_DOMAIN'),
-                     api_key=os.environ.get('MAILGUN_API_KEY'))
 
 class UserListResource(Resource):
     def post(self):
@@ -52,6 +48,7 @@ class UserListResource(Resource):
                        _external=True)
 
         text = 'Please confirm your registration by clicking on the link: {}'.format(link)
+        print(user.email)
         
         response = mailgun.send_email(to=user.email,
                            subject=subject,
