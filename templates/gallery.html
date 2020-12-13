@@ -1,16 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html"  %}
 
-{% for image_name in image_names %}
 
-<img class='image' src="./static/images/pictures/{{image_name}}">
+
+{%block image %}
+{% for image in image_names %}
+
+<img class='image' src="./static/images/pictures/dog.jpg">
 
 {% endfor %}
-
-</body>
-</html>
+{% endblock %}

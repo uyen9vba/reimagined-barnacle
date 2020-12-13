@@ -1,4 +1,5 @@
 import requests
+import os
 
 
 class MailgunApi:
@@ -30,8 +31,7 @@ class MailgunApi:
         return response
 
 
-mailgun = MailgunApi(
-        domain='DOMAIN',
-        api_key='KEY')
+mailgun = MailgunApi(domain=os.environ.get('MAILGUN_DOMAIN'),
+                     api_key=os.environ.get('MAILGUN_API_KEY'))
 
 

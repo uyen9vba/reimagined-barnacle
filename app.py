@@ -126,6 +126,7 @@ def register_resources(app):
     @app.route('/gallery')
     def get_gallery():
        image_names = os.listdir('./static/images/pictures')
+       print(image_names)
        return render_template("gallery.html", image_names=image_names)
 
 
