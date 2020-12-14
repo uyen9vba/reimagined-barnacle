@@ -113,8 +113,6 @@ def register_resources(app):
 
                 return redirect(request.url)
 
-            file.save(os.path.join('static/images/pictures', file.filename))
-
             print(str(session['access_token']))
 
             response = requests.post(
@@ -127,8 +125,10 @@ def register_resources(app):
                     )
             json = response.json()
             print(json)
-            image_id = json['id']
+
+            file.save(os.path.join('static/images/pictures', file.filename))
             '''
+            image_id = json['id']
             files = {'file': open(os.getcwd() + file.filename, 'rb')}
 
             requests.put(
@@ -143,7 +143,12 @@ def register_resources(app):
     @app.route('/gallery')
     def get_gallery():
        image_names = os.listdir('./static/images/pictures')
-       return render_template("gallery.html", image_names=image_names)
+       image_pages = []
+       for a in image_names:
+           name = os.path.splitext(a)
+           image_pages.append(name[0])
+
+       return render_template("gallery.html", image_names=image_names, image_pages=image_pages)
 
 
     @app.route('/<image>')
