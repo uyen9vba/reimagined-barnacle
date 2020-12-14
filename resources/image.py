@@ -47,14 +47,20 @@ class ImageListResource(Resource):
         jinja_var = {
             'title': name,
             'name' : name,
-            'description': description
+            'description': description,
+            'image': filename
         }
 
         template = jinja_env.get_template('imagecontent.html')
-        output = template.render(title=jinja_var['name'], name=jinja_var['name'],description=jinja_var['description'])
-        print(os.getcwd())
+        output = template.render(
+                title=jinja_var['name'],
+                name=jinja_var['name'],
+                description=jinja_var['description'],
+                image=jinja_var['image'])
 
-        with open(os.getcwd() + "/" + filename + ".html", "w") as fh:
+        filename = os.path.splitext(filename)
+
+        with open(os.getcwd() + "/templates/" + filename[0] + ".html", "w") as fh:
             fh.write(output)
 
         return image_schema.dump(image).data, HTTPStatus.CREATED

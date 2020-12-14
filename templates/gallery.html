@@ -1,16 +1,9 @@
 {% extends "base.html"  %}
 
-
-
-{%block image %}
-{% for image_name in image_names %}
-
-
-<a target="_blank" href="/">
-  <img src="./static/images/pictures/{{ image_name }}" alt="Avatar" class="image">
+{% block image %}
+{% for a in image_pages %}
+<a href='/{{ image_pages[loop.index - 1] }}'>
+	<img src="./static/images/pictures/{{ image_names[loop.index - 1] }}" alt="Avatar" class="image">
 </a>
-
-
-
 {% endfor %}
 {% endblock %}
