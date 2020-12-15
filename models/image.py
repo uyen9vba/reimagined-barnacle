@@ -1,5 +1,6 @@
 from extensions import db
 
+
 class Image(db.Model):
     __tablename__ = 'image'
 
