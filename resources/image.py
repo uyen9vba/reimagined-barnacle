@@ -119,6 +119,11 @@ class ImageResource(Resource):
         if current_user != image.user_id:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
+        template = os.path.splitext(image.filename)
+
+        os.remove(os.getcwd() + '/static/images/pictures/' + image.filename)
+        os.remove(os.getcwd() + '/templates/' + template[0] + ".html")
+
         image.delete()
 
         return {}, HTTPStatus.NO_CONTENT

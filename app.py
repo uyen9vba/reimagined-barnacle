@@ -15,6 +15,9 @@ from models.user import User
 from resources.image import ImageListResource, ImageResource, ImagePublishResource, ImageCoverUploadResource
 from resources.user import UserListResource, UserResource, MeResource, UserImageListResource, UserActivateResource, UserAvatarUploadResource
 from resources.token import TokenResource, RefreshResource, RevokeResource, black_list
+
+from resources.tag import TagResource, TagListResource
+from models.tag import Tag
 from utils import save_image
 
 
@@ -154,6 +157,11 @@ def register_resources(app):
     @app.route('/<image>')
     def image(image):
         return render_template(f'{image}.html')
+
+
+
+    api.add_resource(TagResource, '/tags/<int:tag_id>')
+    api.add_resource(TagListResource, '/tags')
 
     api.add_resource(ImageCoverUploadResource, '/images/<int:image_id>/cover')
     api.add_resource(UserAvatarUploadResource, '/users/avatar')
