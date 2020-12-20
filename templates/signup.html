@@ -1,46 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Signup - Ihws</title>
-	<meta name="description" content="">
-	<meta name="author" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="../static/normalize.css">
-	<link rel="stylesheet" href="../static/skeleton.css">
-	<link rel="stylesheet" href="../static/ihws.css">
-	<link rel="icon" type="image/png" href="../static/images/assets/favicon.png">
-</head>
-<body>
-  <div class="container">
-	    <div class='row' style='margin-top: 5%'>
-		    <a class='button' href='/'>Home</a>
-		    <a class='button' href='/gallery'>Gallery</a>
-		    <a class='button' href='/upload'>Upload</a>
-		    <a class='button' href='/signin'>Sign in</a>
-		    <a class='button' href='/signup'>Sign up</a>
-	    </div>
-	    <section class='header'>
-		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Sign up</h4>
-	    </section>
-	    <form method='post'> 
-	    	<div class='row'>
-		    	<div class='one-half column'>
-	    			<label>Username</label>
-    				<input name='username' class='u-full-width' type='text'>	
-			</div>
-			<div class='one-half column'>
-				<label>Password</label>
-				<input name='password' class='u-full-width' type='password'>
-			</div>
-	    	</div>
-		<div class'eight columns'>
-			<label>Your email</label>
-			<input name='email' class='u-full-width' type='email'>
-	   	</div>
-		<input class='button-primary' type='submit' value='Sign up'>
-	    </form>
-  </div>
-</body>
-</html>
+
+{% extends 'base.html' %}
+
+{% block title %}
+Sign up
+{% endblock %}
+
+{% block content %}
+<section class='header'>
+    <h4 class='title' style='text-align: center; margin-top: 5%;'>Sign up</h4>
+</section>
+<form id='signup'> 
+	<div class='row'>
+		<div class='one-half column'>
+			<label>Username</label>
+			<input name='username' class='u-full-width' type='text'>	
+		</div>
+		<div class='one-half column'>
+			<label>Password</label>
+			<input name='password' class='u-full-width' type='password'>
+		</div>
+	</div>
+	<div class'eight columns'>
+		<label>Email</label>
+		<input name='email' class='u-full-width' type='email'>
+	</div>
+	<input class='button-primary' type='submit' value='Sign up'>
+</form>
+{% endblock %}

@@ -10,30 +10,40 @@
 	<link rel="stylesheet" href="../static/normalize.css">
 	<link rel="stylesheet" href="../static/skeleton.css">
 	<link rel="stylesheet" href="../static/ihws.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src='../static/ihws.js'></script>
 	<link rel="icon" type="image/png" href="../static/images/assets/favicon.png">
+	<script src='../static/jquery-3.5.1.min.js'></script>
+	<script src='../static/ihws.js'></script>
 </head>
 <body>
-  <div class="container">
-    <div>
-	    <div class='row' style='margin-top: 5%'>
-		    <a class='button' href='/'>Home</a>
-		    <a class='button' href='/gallery'>Gallery</a>
-		    <a class='button' href='/upload'>Upload</a>
-		    <a class='button' href='/signin'>Sign in</a>
-		    <a class='button' href='/signup'>Sign up</a>
-	    </div>
-	    <div style="margin-top: 5%">
-		    <h4>{% block name %}{% endblock %}</h4>
-	    </div>
-	    <div id="content">
-		    {% block image %}{% endblock %}
-	    </div>
-	    <div id="description" style="margin-top: 2%">
-		    <p>{% block description %}{% endblock %}</p>
-	    </div>
-    </div>
-  </div>
+	<nav class='navigation-bar'>
+		<a class='navigation-item' href='/'>
+			<img class='navigation-icon' src='../static/images/assets/home.png'>
+			Home
+		</a>
+		<a class='navigation-item' href='/gallery'>
+			<img class='navigation-icon' src='../static/images/assets/gallery.png'>
+			Gallery
+		</a>
+		<a class='navigation-item' href='/upload'>
+			<img class='navigation-icon' src='../static/images/assets/upload.png'>
+			Upload
+		</a>
+		{% if not session['access_token'] %}
+		<a class='navigation-item' href='/signup' style='float: right'>Sign up</a>
+		<a class='navigation-item' href='/signin' style='float: right'>Sign in</a>
+		{% else %}
+		<div class='menu' style='float: right'>
+			<img class='navigation-icon' src='../static/images/assets/menu.png'>
+			<div class='menu-content'>
+				<a href='/revoke'>Sign out</a></br>
+				<a href='/gallery'>My Gallery</a></br>
+				<a>Settings</a>
+			</div>
+		</div>
+		{% endif %}
+	</nav>
+	<div class='container'>
+	{% block content %}{% endblock %}
+	</div>
 </body>
 </html>

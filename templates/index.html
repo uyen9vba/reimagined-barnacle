@@ -1,36 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Ihws</title>
-	<meta name="description" content="">
-	<meta name="author" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="../static/normalize.css">
-	<link rel="stylesheet" href="../static/skeleton.css">
-	<link rel="stylesheet" href="../static/ihws.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src='../static/ihws.js'></script>
-	<link rel="icon" type="image/png" href="../static/images/assets/favicon.png">
-</head>
-<body>
-  <div class="container">
-    <div>
-	    <div class='row' style='margin-top: 5%'>
-		    <a class='button' href='/'>Home</a>
-		    <a class='button' href='/gallery'>Gallery</a>
-		    <a class='button' href='/upload'>Upload</a>
-		    <a class='button' href='/signin'>Sign in</a>
-		    <a class='button' href='/signup'>Sign up</a>
-	    </div>
-	    <div style="margin-top: 5%">
-		    <h4>Welcome to Ihws</h4>
-	    </div>
-	    <div id="content">
-		    <img src="../static/images/assets/welcome.jpeg" class="image">
-	    </div>
-    </div>
-  </div>
-</body>
-</html>
+
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<section class='header'>
+    <h4 class='title' style='text-align: center; margin-top: 5%;'>Welcome to Ihws!</h4>
+</section>
+<div>
+	<img class='image' src='../static/images/assets/welcome.jpeg'>
+</div>
+{% endblock %}

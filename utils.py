@@ -9,8 +9,8 @@ def hash_password(password):
     return pbkdf2_sha256.hash(password)
 
 def check_password(password, hashed):
-    #a = pbkdf2_sha256.hash(password)
-    #pbkdf2_sha256.identify(a)
+    a = pbkdf2_sha256.hash(password)
+    pbkdf2_sha256.identify(a)
     
     return pbkdf2_sha256.verify(password, hashed)
 
@@ -27,8 +27,8 @@ def verify_token(token, max_age=(30 * 60), salt=None):
 
     return email
 
-def save_image(image, folder, filename):
-
+def save_image(image, folder):
+    filename = '{}.{}'.format(uuid.uuid4(), extension(image.filename))
     image_set.save(image, folder=folder, name=filename)
 
     return filename

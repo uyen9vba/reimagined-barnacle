@@ -9,6 +9,7 @@ class ImageSchema(Schema):
     id = fields.Integer(dump_only=True)
     name = fields.String(required=True, validate=[validate.Length(max=100)])
     description = fields.String(validate=[validate.Length(max=200)])
+    uuid = fields.String(validate=[validate.Length(max=200)])
     filename = fields.String(validate=[validate.Length(max=200)])
     is_publish = fields.Boolean(dump_only=True)
     cover_url = fields.Method(serialize='dump_cover_url')

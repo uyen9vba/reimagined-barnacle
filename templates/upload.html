@@ -1,42 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Upload - Ihws</title>
-	<meta name="description" content="">
-	<meta name="author" content="">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="../static/normalize.css">
-	<link rel="stylesheet" href="../static/skeleton.css">
-	<link rel="stylesheet" href="../static/ihws.css">
-	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>	
-	<script src="../static/ihws.js"></script>
-	<link rel="icon" type="image/png" href="../static/images/assets/favicon.png">
-</head>
-<body>
-  <div class="container">
-	    <div class='row' style='margin-top: 5%'>
-		    <a class='button' href='/'>Home</a>
-		    <a class='button' href='/gallery'>Gallery</a>
-		    <a class='button' href='/upload'>Upload</a>
-		    <a class='button' href='/signin'>Sign in</a>
-		    <a class='button' href='/signup'>Sign up</a>
-	    </div>
-	    <section class='header'>
-		    <h4 class='title' style='text-align: center; margin-top: 5%;'>Upload an image</h4>
-	    </section>
-	    <form method='post' enctype='multipart/form-data'>
-		    <label>Select a file:</label>
-		    <input name='file' class='u-full-width'  type='file'>
-		    <label>Name</label>
-		    <div class='row'>
-			    <input name='name' class='six columns' type='text'>
-		    </div>
-		    <label>Description</label>
-			<textarea name='description' class='u-full-width' type='text'></textarea>
-    		    <input class='button-primary' type='submit' value='upload'>
-	    </form>
-  </div>
-</body>
-</html>
+
+{% extends 'base.html' %}
+
+{% block title %}
+Upload
+{% endblock %}
+
+{% block content %}
+<section class='header'>
+    <h4 class='title' style='text-align: center; margin-top: 5%;'>Upload an image</h4>
+</section>
+<form id='upload'>
+    <label>Select a file:</label>
+    <input id='file' class='u-full-width' type='file'>
+    <label>Name</label>
+    <div class='row'>
+	    <input name='name' class='six columns' type='text'>
+    </div>
+    <label>Description</label>
+	<textarea id='description' class='u-full-width' type='text'></textarea>
+    <input class='button-primary' type='submit' value='upload'>
+</form>
+{% endblock %}

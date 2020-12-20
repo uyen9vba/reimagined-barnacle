@@ -1,9 +1,13 @@
 {% extends "base.html"  %}
 
-{% block image %}
+{% block title %}
+Gallery
+{% endblock %}
+
+{% block content %}
 {% for a in image_pages %}
 <a href='/{{ image_pages[loop.index - 1] }}'>
-	<img src="./static/images/pictures/{{ image_names[loop.index - 1] }}" alt="Avatar" class="image">
+	<img src="./static/images/pictures/{{ image_names[loop.index - 1] }}" class="image" style='margin-top: 5%'>
 </a>
 {% endfor %}
 {% endblock %}
