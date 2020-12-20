@@ -1,64 +1,76 @@
 
-var token;
+$(document).ready(function() {
+	$('#signup').submit(function(event) {
+		event.preventDefault();
 
-function signin() {
-	var data = JSON.stringify({
-		"email": document.getElementById("email").value,
-		"password": document.getElementById("password").value
+		var data = JSON.stringify({
+			'email': $('input[name=email]').val(),
+			'username': $('input[name=username]').val(),
+			'password': $('input[name=password]').val()});
+
+		$.ajax({
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'},
+			url: 'http://localhost:5000/users',
+			type: 'POST',
+			dataType: 'json',
+			data: data
+		}).done(function(response) {
+			console.log(response);
+		});
 	});
 
-	$.ajax(url='http://localhost:5000/token', settings={
-		type: 'POST',
-		data: data
-	}).always(function(json) {
-		alert(json);
-		token = json[0];
-	});
-}
+	$('#signin').submit(function(event) {
+		event.preventDefault();
 
-function signup() {
-	var data = JSON.stringify({
-		username: document.getElementById("username").value,
-		password: document.getElementById("password").value,
-		email: document.getElementById("email").value
-	});
+		var data = JSON.stringify({
+			'email': $('input[name=email]').val(),
+			'password': $('input[name=password]').val()});
 
-	alert(data);
-
-	$.ajax({
-		url: '/users',
-		type: 'POST',
-		data: data
-	});
-}
-
-function upload() {
-	var data = JSON.stringify({
-		"name": document.getElementById("name").value,
-		"description": document.getElementById("description").value,
-		"filename": document.getElementById('file').value.split(/(\\|\/)/g).pop()
+		$.ajax({
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'},
+			url: 'http://localhost:5000/token',
+			type: 'POST',
+			dataType: 'json',
+			data: data
+		}).done(function(response) {
+			console.log(response);
+		});
 	});
 
-	alert(data);
+	$('#delete').click(function(event) {
+		event.preventDefault();
 
-	var id;
+		var filename = window.location.pathname.split('/');
 
-	$.ajax(url='http://localhost:5000/images', settings={
-		type: 'POST',
-		data: data,
-		headers: {Authorization: token}
-	}).always(function(json) {
-		id = json['id'];
+		$.ajax({
+			type: 'DELETE',
+			url: 'http://localhost:5000/images/' + filename[1]});
+			
 	});
 
-	var formData = new FormData();
-	formData.append('file', input.files[0]);
+	$('#upload').submit(function(event) {
+		event.preventDefault();
 
-	$.ajax(url='http://localhost:5000/images/' + id + '/cover', settings={
-		type: 'PUT',
-		data: formData,
-		contentType: 'multipart/form-data',
-		mimeType: 'multipart/form-data',
-		headers: {Authorization: token}
+		var formData = new FormData();
+		
+		formData.append('name', $('input[name=name]').val());
+		formData.append('description', document.getElementById('description').value);
+		formData.append('file', $('#file')[0].files[0]);
+		
+		$.ajax({
+			url: 'http://localhost:5000/images',
+			type: 'POST',
+			data: formData,
+			mimeType: 'multipart/form-data',
+			enctype: 'multipart/form-data',
+			contentType: false,
+			processData: false
+		}).done(function(response) {
+			console.log(response);
+		});
 	});
-}
+});

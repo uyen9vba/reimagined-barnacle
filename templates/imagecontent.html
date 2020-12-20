@@ -1,17 +1,22 @@
 {% extends "base.html"  %}
 
 {% block title %}
-{{ title }}
-{% endblock %}
-
-{% block name %}
 {{ name }}
 {% endblock %}
 
-{% block image %}
-<img class='image' src="../static/images/pictures/{{ image }}">
+{% block content %}
+<div class='row' style="margin-top: 5%">
+	<h4 id='name' class='eight columns'>{{ name }}</h4>
+	<input id='delete' class='two columns button' value='Delete' type='button' 
+	style='float: right; background-color: #FF4646 !important'>
+	<input id='edit' class='two columns button' value='Edit' type='button' 
+	style='float: right; background-color: #4E8D7C !important'>
+</div>
+<div>
+	<img class='image' src="../static/images/pictures/{{ filename }}">
+</div>
+<div style="margin-top: 2%">
+	<p id='description'>{{ description }}</p>
+</div>
 {% endblock %}
 
-{% block description %}
-{{ description }}
-{% endblock description %}

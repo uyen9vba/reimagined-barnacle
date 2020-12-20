@@ -7,6 +7,7 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(200))
+    uuid = db.Column(db.String(100))
     filename = db.Column(db.String(100))
     is_publish = db.Column(db.Boolean(), default=False)
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
@@ -19,6 +20,10 @@ class Image(db.Model):
     @classmethod
     def get_all_published(cls):
         return cls.query.filter_by(is_publish=True).all()
+
+    @classmethod
+    def get_all(cls):
+        return cls.query.all()
 
     @classmethod
     def get_by_id(cls, image_id):
@@ -41,3 +46,6 @@ class Image(db.Model):
         else:
             return cls.query.filter_by(user_id=user_id).all()
 
+    @classmethod
+    def get_by_uuid(cls, uuid):
+        return cls.query.filter_by(uuid=uuid).first()

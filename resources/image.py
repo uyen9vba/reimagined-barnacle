@@ -1,5 +1,6 @@
-from flask import request
+from flask import request, session
 from flask_restful import Resource
+from flask_uploads import extension
 from http import HTTPStatus
 from flask_jwt_extended import get_jwt_identity, jwt_required, jwt_optional
 import jinja2
@@ -19,46 +20,53 @@ image_cover_schema = ImageSchema(only=('cover_url', ))
 
 class ImageListResource(Resource):
     def get(self):
-        images = Image.get_all_published()
+        images = Image.get_all()
 
         return image_list_schema.dump(images).data, HTTPStatus.OK
 
-    @jwt_required
     def post(self):
-        json_data = request.get_json()
+        name = request.form.get('name')
+        description = request.form.get('description')
+        file = request.files['file']
+        filename = save_image(image=file, folder='pictures')
+        filename = os.path.splitext(filename)
 
-        name = json_data['name']
-        description = json_data['description']
-        filename = json_data['filename']
-
-        current_user = get_jwt_identity()
-
-        data, errors = image_schema.load(data=json_data)
+        data, errors = image_schema.load({
+            'name': name,
+            'description': description,
+            'uuid': filename[0],
+            'filename': filename[0] + filename[1]})
         
         if errors:
             return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
 
         image = Image(**data)
+
+        current_user = get_jwt_identity()
+
+        if not file:
+            return {'message': 'Not a valid image'}, HTTPStatus.BAD_REQUEST
+
+        if not image_set.file_allowed(file, file.filename):
+            return {'message': 'File type not allowed'}, HTTPStatus.BAD_REQUEST
+
+        jinja_var = {
+            'name' : name,
+            'description': description,
+            'filename': filename[0] + filename[1]
+        }
+
         image.user_id = current_user
         image.save()
 
         jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
 
-        jinja_var = {
-            'title': name,
-            'name' : name,
-            'description': description,
-            'image': filename
-        }
-
         template = jinja_env.get_template('imagecontent.html')
         output = template.render(
-                title=jinja_var['name'],
                 name=jinja_var['name'],
                 description=jinja_var['description'],
-                image=jinja_var['image'])
-
-        filename = os.path.splitext(filename)
+                filename=jinja_var['filename'],
+                session=session)
 
         with open(os.getcwd() + "/templates/" + filename[0] + ".html", "w") as fh:
             fh.write(output)
@@ -106,10 +114,8 @@ class ImageResource(Resource):
 
         return image_schema.dump(image).data, HTTPStatus.OK
 
-
-    @jwt_required
-    def delete(self, image_id):
-        image = Image.get_by_id(image_id=image_id)
+    def delete(self, uuid):
+        image = Image.get_by_uuid(uuid)
 
         if image is None:
             return {'message': 'Image not found'}, HTTPStatus.NOT_FOUND
@@ -167,7 +173,7 @@ class ImagePublishResource(Resource):
 
 
 class ImageCoverUploadResource(Resource):
-
+    
     @jwt_required
     def put(self, image_id):
 

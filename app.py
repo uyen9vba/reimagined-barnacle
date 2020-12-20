@@ -2,12 +2,13 @@ from flask import Flask, render_template, session, redirect, url_for, request, R
 from flask_migrate import Migrate
 from http import HTTPStatus
 from flask_restful import Api
-from flask_uploads import configure_uploads, patch_request_class
-from flask_jwt_extended import get_jwt_identity
+from flask_uploads import configure_uploads, patch_request_class, extension
+from flask_jwt_extended import get_jwt_identity, get_jwt_claims, jwt_required
 from markupsafe import escape
 import requests
 import json
 import os
+import uuid
 from config import Config
 from extensions import db, jwt, image_set
 from models.image import Image
@@ -19,7 +20,6 @@ from resources.token import TokenResource, RefreshResource, RevokeResource, blac
 from resources.tag import TagResource, TagListResource
 from models.tag import Tag
 from utils import save_image
-
 
 def create_app():
     app = Flask(__name__)
@@ -45,21 +45,22 @@ def register_extensions(app):
 
         return jti in black_list
 
+    @jwt.user_claims_loader
+    def set_token(token):
+        return {'access_token': token}
+
 def register_resources(app):
     api = Api(app)
 
     @app.route('/')
     def index():
-        if 'email' in session:
-            pass
-
         return render_template('index.html')
 
-    @app.route('/signup', methods=['POST'])
+    @app.route('/signup', methods=['GET', 'POST'])
     def signup():
-        render_template('signup.html')
-
-        if request.method == 'POST':
+        if request.method == 'GET':
+            return render_template('signup.html')
+        elif request.method == 'POST':
             requests.post(
                     url='http://localhost:5000/users',
                     json={
@@ -69,100 +70,94 @@ def register_resources(app):
                     )
             return redirect(url_for('index'))
 
-
-    access_token = ""
-
-    @app.route('/signin', methods=['POST'])
+    @app.route('/signin', methods=['GET'])
     def signin():
-        render_template('signin.html')
-
-        if request.method == 'POST':
+        if request.method == 'GET':
+            return render_template('signin.html')
+        elif request.method == 'POST':
             session['email'] = request.form['email']
             session['password'] = request.form['password']
 
-            response = requests.post(
+            r = requests.post(
                     url='http://localhost:5000/token',
                     json={
                         'email': request.form['email'],
                         'password': request.form['password']}
                     )
-            json = response.json()
-            print(json['access_token'])
-
-            session['access_token'] = json['access_token']
-
-
+            json = r.json()
 
             return redirect(url_for('index'))
-
-
-
-
-    @app.route('/upload', methods=['POST', 'PUT'])
+    
+    @app.route('/upload', methods=['GET'])
     def upload():
-        render_template('upload.html')
-
-        if request.method == 'POST':
+        if request.method == 'GET':
+            return render_template('upload.html')
+        elif request.method == 'POST':
             if 'file' not in request.files:
                 print('No files')
 
                 return redirect(request.url)
 
             file = request.files['file']
-            print(file)
 
             if file.filename == '':
                 print('No selected file')
 
                 return redirect(request.url)
 
-            print(str(session['access_token']))
+            filename = f'{uuid.uuid4()}.{extension(file.filename)}'
+
+            claims = get_jwt_claims()
+            print(claims)
 
             response = requests.post(
                     url='http://localhost:5000/images',
-                    headers={'Authorization': 'Bearer ' + str(session['access_token'])},
+                    headers={'Authorization': 'Bearer ' + claims['access_token']},
                     json={
                         'name': request.form['name'],
                         'description': request.form['description'],
-                        'filename': file.filename}
+                        'filename': filename}
                     )
-            json = response.json()
-            print(json)
-
-            file.save(os.path.join('static/images/pictures', file.filename))
-            '''
-            image_id = json['id']
-            files = {'file': open(os.getcwd() + file.filename, 'rb')}
-
-            requests.put(
-                    url='http://localhost:5000/' + str(image_id) + '/cover',
-                    headers={'Authorization': 'Bearer ' + str(session['access_token'])},
-                    files=files
-                    )
-            '''
+            file.save(os.path.join('static/images/pictures', filename))
 
         return redirect(url_for('index'))
         
     @app.route('/gallery')
     def get_gallery():
-       image_names = os.listdir('./static/images/pictures')
-       image_pages = []
-       for a in image_names:
-           name = os.path.splitext(a)
-           image_pages.append(name[0])
+        image_names = os.listdir('./static/images/pictures')
+        image_pages = []
 
-       return render_template("gallery.html", image_names=image_names, image_pages=image_pages)
+        for a in image_names:
+            name = os.path.splitext(a)
+            image_pages.append(name[0])
 
+        return render_template("gallery.html", image_names=image_names, image_pages=image_pages)
 
-    @app.route('/<image>')
+    @app.route('/revoke')
+    def singout():
+        print('Signing out')
+        requests.post(
+                url='http://localhost:5000/revoke',
+                headers={'Authorization': 'Bearer ' + session['access_token']})
+
+        session['access_token'] = ''
+
+        return redirect(url_for('index'))
+
+    @app.route('/<image>', methods=['GET'])
     def image(image):
-        return render_template(f'{image}.html')
+        if request.method == 'GET':
+            return render_template(f'{image}.html')
+        elif request.method == 'DELETE':
+            response = requests.delete(
+                    url=request.url,
+                    headers={'Authorization': 'Bearer ' + session['access_token']})
 
+            return url_for('index')
 
 
     api.add_resource(TagResource, '/tags/<int:tag_id>')
     api.add_resource(TagListResource, '/tags')
-
     api.add_resource(ImageCoverUploadResource, '/images/<int:image_id>/cover')
     api.add_resource(UserAvatarUploadResource, '/users/avatar')
     api.add_resource(UserActivateResource, '/users/activate/<string:token>')
@@ -174,7 +169,7 @@ def register_resources(app):
     api.add_resource(UserResource, '/users/<string:username>')
     api.add_resource(UserImageListResource, '/users/<string:username>/images')
     api.add_resource(ImageListResource, '/images')
-    api.add_resource(ImageResource, '/images/<int:image_id>')
+    api.add_resource(ImageResource, '/images/<string:uuid>')
     api.add_resource(ImagePublishResource, '/images/<int:image_id>/publish')
 
 
