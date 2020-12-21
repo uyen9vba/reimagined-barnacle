@@ -1,4 +1,4 @@
-from flask import request, url_for, render_template
+from flask import request, url_for, render_template, make_response
 from flask_restful import Resource
 from http import HTTPStatus
 from flask_jwt_extended import jwt_optional, get_jwt_identity, jwt_required
@@ -21,6 +21,9 @@ recipe_list_schema = ImageSchema(many=True)
 
 
 class UserListResource(Resource):
+    def get(self):
+        return make_response(render_template('/signup.html'))
+
     def post(self):
         json_data = request.get_json()
 

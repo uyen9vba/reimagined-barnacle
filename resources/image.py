@@ -1,4 +1,4 @@
-from flask import request, session
+from flask import request, session, render_template, make_response
 from flask_restful import Resource
 from flask_uploads import extension
 from http import HTTPStatus
@@ -19,16 +19,11 @@ image_cover_schema = ImageSchema(only=('cover_url', ))
 
 
 class ImageListResource(Resource):
-    def get(self):
-        images = Image.get_all()
-
-        return image_list_schema.dump(images).data, HTTPStatus.OK
-
     def post(self):
         name = request.form.get('name')
         description = request.form.get('description')
         file = request.files['file']
-        filename = save_image(image=file, folder='pictures')
+        filename = save_image(image=file, folder='images')
         filename = os.path.splitext(filename)
 
         data, errors = image_schema.load({
@@ -50,33 +45,15 @@ class ImageListResource(Resource):
         if not image_set.file_allowed(file, file.filename):
             return {'message': 'File type not allowed'}, HTTPStatus.BAD_REQUEST
 
-        jinja_var = {
-            'name' : name,
-            'description': description,
-            'filename': filename[0] + filename[1]
-        }
-
         image.user_id = current_user
         image.save()
-
-        jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
-
-        template = jinja_env.get_template('imagecontent.html')
-        output = template.render(
-                name=jinja_var['name'],
-                description=jinja_var['description'],
-                filename=jinja_var['filename'],
-                session=session)
-
-        with open(os.getcwd() + "/templates/" + filename[0] + ".html", "w") as fh:
-            fh.write(output)
 
         return image_schema.dump(image).data, HTTPStatus.CREATED
 
 class ImageResource(Resource):
     @jwt_optional
-    def get(self, image_id):
-        image = Image.get_by_id(image_id=image_id)
+    def get(self, uuid):
+        image = Image.get_by_uuid(uuid)
 
         if image is None:
             return {'message': 'image not found'}, HTTPStatus.NOT_FOUND
@@ -86,10 +63,15 @@ class ImageResource(Resource):
         if image.is_publish == False and image.user_id != current_user:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
-        return image_schema.dump(image).data, HTTPStatus.OK
+        return make_response(render_template(
+                '/imagecontent.html',
+                name=image.name,
+                filename=image.filename,
+                description=image.description))
 
     def patch(self, uuid):
         json_data = request.get_json()
+        print(json_data)
 
         data, errors = image_schema.load(data=json_data, partial=('name',))
 
@@ -109,24 +91,6 @@ class ImageResource(Resource):
         image.name = data.get('name') or image.name
         image.description = data.get('description') or image.description
 
-        jinja_var = {
-            'name' : image.name,
-            'description': image.description,
-            'filename': image.filename
-        }
-
-        jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
-
-        template = jinja_env.get_template('imagecontent.html')
-        output = template.render(
-                name=jinja_var['name'],
-                description=jinja_var['description'],
-                filename=jinja_var['filename'],
-                session=session)
-
-        with open(os.getcwd() + "/templates/" + uuid + ".html", "w") as fh:
-            fh.write(output)
-
         image.save()
 
         return image_schema.dump(image).data, HTTPStatus.OK
@@ -142,10 +106,7 @@ class ImageResource(Resource):
         if current_user != image.user_id:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
-        template = os.path.splitext(image.filename)
-
-        os.remove(os.getcwd() + '/static/images/pictures/' + image.filename)
-        os.remove(os.getcwd() + '/templates/' + template[0] + ".html")
+        os.remove(os.getcwd() + '/static/images/images/' + image.filename)
 
         image.delete()
 
