@@ -6,11 +6,13 @@
 
 {% block content %}
 <div class='row' style="margin-top: 5%">
-	<h4 id='name' class='eight columns'>{{ name }}</h4>
-	<input id='delete' class='two columns button' value='Delete' type='button' 
-	style='float: right; background-color: #FF4646 !important'>
-	<input id='edit' class='two columns button' value='Edit' type='button' 
-	style='float: right; background-color: #4E8D7C !important'>
+	<div class='six columns'>
+		<h4 id='name'>{{ name }}</h4>
+	</div>
+	<div id='buttons' class='six columns'>
+		<input id='delete' class='button' value='Delete' type='button' style='float: right; margin-left: 10px; background-color: #FF4646 !important; width: 30% !important'>
+		<input id='edit' class='button' value='Edit' type='button' style='float: right; margin-left: 10px; background-color: #4E8D7C !important; width: 30% !important'>
+	</div>
 </div>
 <div>
 	<img class='image' src="../static/images/pictures/{{ filename }}">
