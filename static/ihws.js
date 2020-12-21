@@ -50,7 +50,7 @@ $(document).ready(function() {
 
 		$.ajax({
 			type: 'DELETE',
-			url: 'http://localhost:5000/images/' + uuid[1]
+			url: 'http://localhost:5000/images/' + uuid[2]
 		}).done(function(response) {
 			console.log(response);
 			window.location.replace('/gallery');
@@ -71,7 +71,7 @@ $(document).ready(function() {
 				'Accept': 'application/json',
 				'Content-Type': 'application/json'},
 			type: 'PATCH',
-			url: 'http://localhost:5000/images/' + uuid[1],
+			url: 'http://localhost:5000/images/' + uuid[2],
 			dataType: 'json',
 			data: data
 		}).done(function(response) {
@@ -139,7 +139,7 @@ $(document).ready(function() {
 		}).done(function(response) {
 			var json = $.parseJSON(response);
 			console.log(json);
-			window.location.replace('http://localhost:5000/' + json['uuid']);
+			window.location.replace('http://localhost:5000/images/' + json['uuid']);
 		});
 	});
 });

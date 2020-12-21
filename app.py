@@ -56,75 +56,21 @@ def register_resources(app):
     def index():
         return render_template('index.html')
 
-    @app.route('/signup', methods=['GET', 'POST'])
+    @app.route('/signup')
     def signup():
-        if request.method == 'GET':
-            return render_template('signup.html')
-        elif request.method == 'POST':
-            requests.post(
-                    url='http://localhost:5000/users',
-                    json={
-                        'email': request.form['email'],
-                        'username': request.form['username'],
-                        'password': request.form['password']}
-                    )
-            return redirect(url_for('index'))
+        return render_template('signup.html')
 
-    @app.route('/signin', methods=['GET'])
+    @app.route('/signin')
     def signin():
-        if request.method == 'GET':
-            return render_template('signin.html')
-        elif request.method == 'POST':
-            session['email'] = request.form['email']
-            session['password'] = request.form['password']
+        return render_template('signin.html')
 
-            r = requests.post(
-                    url='http://localhost:5000/token',
-                    json={
-                        'email': request.form['email'],
-                        'password': request.form['password']}
-                    )
-            json = r.json()
-
-            return redirect(url_for('index'))
-    
-    @app.route('/upload', methods=['GET'])
+    @app.route('/upload')
     def upload():
-        if request.method == 'GET':
-            return render_template('upload.html')
-        elif request.method == 'POST':
-            if 'file' not in request.files:
-                print('No files')
-
-                return redirect(request.url)
-
-            file = request.files['file']
-
-            if file.filename == '':
-                print('No selected file')
-
-                return redirect(request.url)
-
-            filename = f'{uuid.uuid4()}.{extension(file.filename)}'
-
-            claims = get_jwt_claims()
-            print(claims)
-
-            response = requests.post(
-                    url='http://localhost:5000/images',
-                    headers={'Authorization': 'Bearer ' + claims['access_token']},
-                    json={
-                        'name': request.form['name'],
-                        'description': request.form['description'],
-                        'filename': filename}
-                    )
-            file.save(os.path.join('static/images/pictures', filename))
-
-        return redirect(url_for('index'))
-        
+        return render_template('upload.html')
+     
     @app.route('/gallery')
     def get_gallery():
-        image_names = os.listdir('./static/images/pictures')
+        image_names = os.listdir('./static/images/images')
         image_pages = []
 
         for a in image_names:
@@ -132,30 +78,7 @@ def register_resources(app):
             image_pages.append(name[0])
 
         return render_template("gallery.html", image_names=image_names, image_pages=image_pages)
-
-    @app.route('/revoke')
-    def singout():
-        print('Signing out')
-        requests.post(
-                url='http://localhost:5000/revoke',
-                headers={'Authorization': 'Bearer ' + session['access_token']})
-
-        session['access_token'] = ''
-
-        return redirect(url_for('index'))
-
-    @app.route('/<image>', methods=['GET'])
-    def image(image):
-        if request.method == 'GET':
-            return render_template(f'{image}.html')
-        elif request.method == 'DELETE':
-            response = requests.delete(
-                    url=request.url,
-                    headers={'Authorization': 'Bearer ' + session['access_token']})
-
-            return url_for('index')
-
-
+    
     api.add_resource(TagResource, '/tags/<int:tag_id>')
     api.add_resource(TagListResource, '/tags')
     api.add_resource(ImageCoverUploadResource, '/images/<int:image_id>/cover')

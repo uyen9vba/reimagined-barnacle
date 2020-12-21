@@ -6,8 +6,8 @@ Gallery
 
 {% block content %}
 {% for a in image_pages %}
-<a href='/{{ image_pages[loop.index - 1] }}'>
-	<img src="./static/images/pictures/{{ image_names[loop.index - 1] }}" class="image" style='margin-top: 5%'>
+<a href='/images/{{ image_pages[loop.index - 1] }}'>
+	<img src="./static/images/images/{{ image_names[loop.index - 1] }}" class="image" style='margin-top: 5%'>
 </a>
 {% endfor %}
 {% endblock %}
