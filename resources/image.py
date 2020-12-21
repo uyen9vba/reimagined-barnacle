@@ -88,8 +88,7 @@ class ImageResource(Resource):
 
         return image_schema.dump(image).data, HTTPStatus.OK
 
-    @jwt_required
-    def patch(self, image_id):
+    def patch(self, uuid):
         json_data = request.get_json()
 
         data, errors = image_schema.load(data=json_data, partial=('name',))
@@ -97,7 +96,7 @@ class ImageResource(Resource):
         if errors:
             return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
 
-        image = Image.get_by_id(image_id=image_id)
+        image = Image.get_by_uuid(uuid)
 
         if image is None:
             return {'message': 'Image not found'}, HTTPStatus.NOT_FOUND
@@ -109,6 +108,24 @@ class ImageResource(Resource):
 
         image.name = data.get('name') or image.name
         image.description = data.get('description') or image.description
+
+        jinja_var = {
+            'name' : image.name,
+            'description': image.description,
+            'filename': image.filename
+        }
+
+        jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
+
+        template = jinja_env.get_template('imagecontent.html')
+        output = template.render(
+                name=jinja_var['name'],
+                description=jinja_var['description'],
+                filename=jinja_var['filename'],
+                session=session)
+
+        with open(os.getcwd() + "/templates/" + uuid + ".html", "w") as fh:
+            fh.write(output)
 
         image.save()
 
