@@ -70,14 +70,21 @@ def register_resources(app):
      
     @app.route('/gallery')
     def get_gallery():
-        image_names = os.listdir('./static/images/images')
-        image_pages = []
+        images = Image.get_all()
+        response = requests.get(
+                url='http://localhost:5000/images')
 
-        for a in image_names:
-            name = os.path.splitext(a)
-            image_pages.append(name[0])
+        json = response.json()
+        print(json)
+        filenames = []
+        uuids = []
+        names = []
+        for a in json['data']:
+            filenames.append(a['filename'])
+            uuids.append(a['uuid'])
+            names.append(a['name'])
 
-        return render_template("gallery.html", image_names=image_names, image_pages=image_pages)
+        return render_template("gallery.html", filenames=filenames, uuids=uuids, names=names)
     
     api.add_resource(TagResource, '/tags/<int:tag_id>')
     api.add_resource(TagListResource, '/tags')

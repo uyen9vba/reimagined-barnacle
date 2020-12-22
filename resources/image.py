@@ -4,6 +4,7 @@ from flask_uploads import extension
 from http import HTTPStatus
 from flask_jwt_extended import get_jwt_identity, jwt_required, jwt_optional
 import jinja2
+import datetime
 
 from models.image import Image
 from schemas.image import ImageSchema
@@ -19,6 +20,11 @@ image_cover_schema = ImageSchema(only=('cover_url', ))
 
 
 class ImageListResource(Resource):
+    def get(self):
+        images = Image.get_all()
+
+        return image_list_schema.dump(images).data
+
     def post(self):
         name = request.form.get('name')
         description = request.form.get('description')
@@ -63,15 +69,38 @@ class ImageResource(Resource):
         if image.is_publish == False and image.user_id != current_user:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
+        created_at = datetime.datetime.now() - image.created_at
+
+        if created_at.days > 0:
+            time = f'{created_at.days}'
+        elif created_at.seconds / 60 > 0:
+            minutes = created_at.seconds / 60
+            time = f'{created_at.seconds / 60}'
+
+            if minutes > 60:
+                hours = minutes / 60
+                hours = str(hours).split('.')[0]
+                if hours == '1':
+                    time = f'{hours} hour'
+                else:
+                    time = f'{hours} hours'
+            else:
+                time = time.split('.')[0]
+                time = f'{time} minutes'
+        else:
+            time = f'{created_at.total_seconds()}'
+
+        time = time + ' ago'
+
         return make_response(render_template(
                 '/imagecontent.html',
+                time=time,
                 name=image.name,
                 filename=image.filename,
                 description=image.description))
 
     def patch(self, uuid):
         json_data = request.get_json()
-        print(json_data)
 
         data, errors = image_schema.load(data=json_data, partial=('name',))
 
