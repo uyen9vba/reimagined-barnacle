@@ -2,6 +2,18 @@
 	width: 100%;
 	max-width: 960px;
 }
+.image-thumbnail {
+	width: auto;
+	height: 180px;
+	cursor: pointer;
+	box-shadow: 0 5px 10px 0 #000;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	background-color: grey;
+	color: #000;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
 .navigation-bar {
 	display: inline-block;
 	width: 100%;

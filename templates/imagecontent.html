@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block content %}
-<div class='row' style="margin-top: 5%">
+<div class='row' style='margin-top: 5%'>
+	<div class='six columns'>
+		<p style='font-style: italic'>{{ time }}</p>
+	</div>
+</div>
+<div class='row'>
 	<div class='six columns'>
 		<h4 id='name'>{{ name }}</h4>
 	</div>
@@ -19,6 +24,11 @@
 </div>
 <div style="margin-top: 2%">
 	<p id='description'>{{ description }}</p>
+</div>
+<div class='row' style='width: 50%'>
+	<label class='u-full-width'>Comment:</label>
+	<textarea id='comment' class='u-full-width'></textarea>
+	<input class='button-primary' type='submit' value='Post'>
 </div>
 {% endblock %}
 

@@ -5,9 +5,12 @@ Gallery
 {% endblock %}
 
 {% block content %}
-{% for a in image_pages %}
-<a href='/images/{{ image_pages[loop.index - 1] }}'>
-	<img src="./static/images/images/{{ image_names[loop.index - 1] }}" class="image" style='margin-top: 5%'>
+<div style='display: flex; flex-wrap: wrap; margin-top: 5%;'>
+{% for a in filenames %}
+<a class='image-thumbnail' href='/images/{{ uuids[loop.index - 1] }}'>
+	<img src="./static/images/images/{{ filenames[loop.index - 1] }}" style='height: 150px; width: auto;'>
+	</br>{{ names[loop.index - 1] }}
 </a>
 {% endfor %}
+</div>
 {% endblock %}
