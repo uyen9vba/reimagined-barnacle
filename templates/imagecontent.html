@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+<div style='width: 940px; margin: auto;'>
 <div class='row' style='margin-top: 5%'>
 	<div class='six columns'>
 		<p style='font-style: italic'>{{ time }}</p>
@@ -19,9 +20,13 @@
 		<input id='edit' class='button' value='Edit' type='button' style='float: right; margin-left: 10px; background-color: #4E8D7C !important; width: 30% !important'>
 	</div>
 </div>
-<div>
-	<img class='image' src="../static/images/images/{{ filename }}">
 </div>
+<div style='width: 960px; margin: auto'>
+<div style='background-color: #EBEBEB'>
+	<img src="../static/images/images/{{ filename }}" style='height: 540px; width: auto; margin: auto; display: block;'>
+</div>
+</div>
+<div style='width: 940px; margin: auto;'>
 <div style="margin-top: 2%">
 	<p id='description'>{{ description }}</p>
 </div>
@@ -29,6 +34,7 @@
 	<label class='u-full-width'>Comment:</label>
 	<textarea id='comment' class='u-full-width'></textarea>
 	<input class='button-primary' type='submit' value='Post'>
+</div>
 </div>
 {% endblock %}
 

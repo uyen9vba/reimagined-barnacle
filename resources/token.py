@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from flask import request, make_response, render_template
+from flask import request, make_response, render_template, session
 from flask_restful import Resource
 from flask_jwt_extended import (create_access_token, create_refresh_token,
 jwt_refresh_token_required, get_jwt_identity, jwt_required, get_raw_jwt, get_jwt_claims)
@@ -25,6 +25,9 @@ class TokenResource(Resource):
 
         access_token = create_access_token(identity=user.id, fresh=True)
         refresh_token = create_refresh_token(identity=user.id)
+
+        session['access_token'] = access_token
+        session['refresh_token'] = refresh_token
 
         return {'access_token': access_token, 'refresh_token': refresh_token}, HTTPStatus.OK
 

@@ -5,9 +5,9 @@ Gallery
 {% endblock %}
 
 {% block content %}
-<div style='display: flex; flex-wrap: wrap; margin-top: 5%;'>
+<div style='display: flex; flex-wrap: wrap; width: 940px; margin: auto;'>
 {% for a in filenames %}
-<a class='image-thumbnail' href='/images/{{ uuids[loop.index - 1] }}'>
+<a class='image-thumbnail' href='/images/{{ uuids[loop.index - 1] }}' style='text-align: center;'>
 	<img src="./static/images/images/{{ filenames[loop.index - 1] }}" style='height: 150px; width: auto;'>
 	</br>{{ names[loop.index - 1] }}
 </a>

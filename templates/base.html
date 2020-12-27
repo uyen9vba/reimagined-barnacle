@@ -15,6 +15,7 @@
 	<script src='../static/ihws.js'></script>
 </head>
 <body>
+	<div class='container'>
 	<nav class='navigation-bar'>
 		<a class='navigation-item' href='/'>
 			<img class='navigation-icon' src='../static/images/assets/home.png'>
@@ -42,8 +43,7 @@
 		</div>
 		{% endif %}
 	</nav>
-	<div class='container'>
-	{% block content %}{% endblock %}
 	</div>
+	{% block content %}{% endblock %}
 </body>
 </html>
