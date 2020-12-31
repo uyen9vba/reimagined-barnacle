@@ -101,6 +101,8 @@ $(document).ready(function() {
 		cancelButton.attr('id', 'cancel');
 		cancelButton.appendTo('#buttons');
 
+		$('<input id="private" type="checkbox">').appendTo('#privatebutton');
+		$('<label id="privatelabel" style="display: inline">Private</label>').appendTo('#privatebutton');
 	});
 
 	$(document).on('click', '#cancel', function() {
@@ -117,6 +119,19 @@ $(document).ready(function() {
 		editButton.appendTo('#buttons');
 
 		document.getElementById('patch').remove();
+		document.getElementById('private').remove();
+		document.getElementById('privatelabel').remove();
+	});
+
+	$(document).on('click', '#revoke', function() {
+		$.ajax({
+			url: 'http://localhost:5000/revoke',
+			type: 'POST',
+			headers: {'Authorization': 'Bearer ' + access_token}
+		}).done(function(response) {
+			console.log(response);
+			window.location.replace('/');
+		});
 	});
 
 	$('#upload').submit(function(event) {
@@ -131,6 +146,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: 'http://localhost:5000/images',
 			type: 'POST',
+			headers: {'Authorization': 'Bearer ' + access_token},
 			data: formData,
 			mimeType: 'multipart/form-data',
 			enctype: 'multipart/form-data',

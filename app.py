@@ -75,10 +75,10 @@ def register_resources(app):
                 url='http://localhost:5000/images')
 
         json = response.json()
-        print(json)
         filenames = []
         uuids = []
         names = []
+
         for a in json['data']:
             filenames.append(a['filename'])
             uuids.append(a['uuid'])

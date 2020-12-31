@@ -13,6 +13,9 @@
 	<link rel="icon" type="image/png" href="../static/images/assets/favicon.png">
 	<script src='../static/jquery-3.5.1.min.js'></script>
 	<script src='../static/ihws.js'></script>
+	<script>
+		var access_token = '{{ session["access_token"] }}';
+	</script>
 </head>
 <body>
 	<div class='container'>
@@ -25,18 +28,18 @@
 			<img class='navigation-icon' src='../static/images/assets/gallery.png'>
 			Gallery
 		</a>
-		<a class='navigation-item' href='/upload'>
-			<img class='navigation-icon' src='../static/images/assets/upload.png'>
-			Upload
-		</a>
 		{% if not session['access_token'] %}
 		<a class='navigation-item' href='/signup' style='float: right'>Sign up</a>
 		<a class='navigation-item' href='/signin' style='float: right'>Sign in</a>
 		{% else %}
+		<a class='navigation-item' href='/upload'>
+			<img class='navigation-icon' src='../static/images/assets/upload.png'>
+			Upload
+		</a>
 		<div class='menu' style='float: right'>
 			<img class='navigation-icon' src='../static/images/assets/menu.png'>
 			<div class='menu-content'>
-				<a href='/revoke'>Sign out</a></br>
+				<a id='revoke'>Sign out</a></br>
 				<a href='/gallery'>My Gallery</a></br>
 				<a>Settings</a>
 			</div>
