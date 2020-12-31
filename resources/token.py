@@ -47,4 +47,6 @@ class RevokeResource(Resource):
 
         black_list.add(jti)
 
-        return {'message': 'Successfully logged out'}, HTTPStatus.OK
+        session['access_token'] = None
+
+        return

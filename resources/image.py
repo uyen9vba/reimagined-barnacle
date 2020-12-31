@@ -25,6 +25,7 @@ class ImageListResource(Resource):
 
         return image_list_schema.dump(images).data
 
+    @jwt_required
     def post(self):
         name = request.form.get('name')
         description = request.form.get('description')
@@ -72,7 +73,10 @@ class ImageResource(Resource):
         created_at = datetime.datetime.now() - image.created_at
 
         if created_at.days > 0:
-            time = f'{created_at.days}'
+            if created_at.days == 1:
+                time = f'{created_at.days} day'
+            else:
+                time = f'{created_at.days} days'
         elif created_at.seconds / 60 > 0:
             minutes = created_at.seconds / 60
             time = f'{created_at.seconds / 60}'
