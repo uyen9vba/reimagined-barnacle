@@ -6,35 +6,41 @@
 
 {% block content %}
 <div style='width: 940px; margin: auto;'>
-<div class='row' style='margin-top: 5%'>
-	<div class='six columns'>
+	<div class='row' style='margin-top: 40px'>
 		<p style='font-style: italic'>{{ time }}</p>
 	</div>
-</div>
-<div class='row'>
-	<div class='six columns'>
-		<h4 id='name'>{{ name }}</h4>
+	<div class='row'>
+		<div style='width: 50%'>
+			<img src='../static/images/assets/{{ avatar_image }}' style='height: 32px; width: 32px; vertical-align: middle'>
+			<p style='display: inline; left: 5px; position: relative; font-size: 1em;'>{{ author }}</p>
+		</div>
+		<div id='privatebutton' style='width: 50%'>
+		</div>
 	</div>
-	<div id='buttons' class='six columns'>
-		<input id='delete' class='button' value='Delete' type='button' style='float: right; margin-left: 10px; background-color: #FF4646 !important; width: 30% !important'>
-		<input id='edit' class='button' value='Edit' type='button' style='float: right; margin-left: 10px; background-color: #4E8D7C !important; width: 30% !important'>
+	<div class='row'>
+		<div class='six columns'>
+			<h4 id='name'>{{ name }}</h4>
+		</div>
+		<div id='buttons' class='six columns'>
+			<input id='delete' class='button' value='Delete' type='button' style='float: right; margin-left: 10px;'>
+			<input id='edit' class='button' value='Edit' type='button' style='float: right; margin-left: 10px'>
+		</div>
 	</div>
-</div>
 </div>
 <div style='width: 960px; margin: auto'>
-<div style='background-color: #EBEBEB'>
-	<img src="../static/images/images/{{ filename }}" style='height: 540px; width: auto; margin: auto; display: block;'>
-</div>
+	<div style='background-color: #EBEBEB'>
+		<img src="../static/images/images/{{ filename }}" style='height: 540px; width: auto; margin: auto; display: block;'>
+	</div>
 </div>
 <div style='width: 940px; margin: auto;'>
-<div id='privatebutton' style="margin-top: 2%">
-	<p id='description'>{{ description }}</p>
-</div>
-<div class='row' style='width: 50%'>
-	<label class='u-full-width'>Comment:</label>
-	<textarea id='comment' class='u-full-width'></textarea>
-	<input class='button-primary' type='submit' value='Post'>
-</div>
+	<div style="margin-top: 2%">
+		<p id='description'>{{ description }}</p>
+	</div>
+	<div class='row' style='width: 50%'>
+		<label class='u-full-width'>Comment:</label>
+		<textarea id='comment' class='u-full-width'></textarea>
+		<input class='button-primary' type='submit' value='Post'>
+	</div>
 </div>
 {% endblock %}
 

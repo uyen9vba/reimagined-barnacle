@@ -2,12 +2,13 @@ from flask import request, session, render_template, make_response
 from flask_restful import Resource
 from flask_uploads import extension
 from http import HTTPStatus
-from flask_jwt_extended import get_jwt_identity, jwt_required, jwt_optional
+from flask_jwt_extended import get_jwt_identity, jwt_required, jwt_optional, decode_token
 import jinja2
 import datetime
 
 from models.image import Image
 from schemas.image import ImageSchema
+from models.user import User
 
 import os
 from extensions import image_set
@@ -20,10 +21,34 @@ image_cover_schema = ImageSchema(only=('cover_url', ))
 
 
 class ImageListResource(Resource):
+    @jwt_optional
     def get(self):
-        images = Image.get_all()
+        if request.headers.get('Authorization'):
+            current_user = get_jwt_identity()
+            print(current_user)
 
-        return image_list_schema.dump(images).data
+            images = Image.get_all_by_user(current_user)
+        else:
+            images = Image.get_all()
+
+        data = image_list_schema.dump(images).data
+        json = data['data']
+        print(json)
+
+        filenames = []
+        uuids = []
+        names = []
+
+        for a in json:
+            filenames.append(a['filename'])
+            uuids.append(a['uuid'])
+            names.append(a['name'])
+
+        return make_response(render_template(
+            "gallery.html",
+            filenames=filenames,
+            uuids=uuids,
+            names=names))
 
     @jwt_required
     def post(self):
@@ -32,11 +57,13 @@ class ImageListResource(Resource):
         file = request.files['file']
         filename = save_image(image=file, folder='images')
         filename = os.path.splitext(filename)
+        private = request.form.get('private')
 
         data, errors = image_schema.load({
             'name': name,
             'description': description,
             'uuid': filename[0],
+            'private': True if private == 'true' else False,
             'filename': filename[0] + filename[1]})
         
         if errors:
@@ -45,6 +72,7 @@ class ImageListResource(Resource):
         image = Image(**data)
 
         current_user = get_jwt_identity()
+        print(current_user)
 
         if not file:
             return {'message': 'Not a valid image'}, HTTPStatus.BAD_REQUEST
@@ -52,7 +80,7 @@ class ImageListResource(Resource):
         if not image_set.file_allowed(file, file.filename):
             return {'message': 'File type not allowed'}, HTTPStatus.BAD_REQUEST
 
-        image.user_id = current_user
+        image.author = current_user
         image.save()
 
         return image_schema.dump(image).data, HTTPStatus.CREATED
@@ -65,10 +93,13 @@ class ImageResource(Resource):
         if image is None:
             return {'message': 'image not found'}, HTTPStatus.NOT_FOUND
 
-        current_user = get_jwt_identity()
+        if image.private == True:
+            current_user = decode_token(session['access_token']).get('identity', None)
 
-        if image.is_publish == False and image.user_id != current_user:
-            return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
+            if image.author != current_user:
+                return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
+
+        user = User.get_by_username(image.author)
 
         created_at = datetime.datetime.now() - image.created_at
 
@@ -98,15 +129,22 @@ class ImageResource(Resource):
 
         return make_response(render_template(
                 '/imagecontent.html',
+                avatar_image=user.avatar_image,
+                author=image.author,
                 time=time,
                 name=image.name,
                 filename=image.filename,
                 description=image.description))
 
+    @jwt_required
     def patch(self, uuid):
         json_data = request.get_json()
+        print(json_data['private'])
 
-        data, errors = image_schema.load(data=json_data, partial=('name',))
+        data, errors = image_schema.load({
+            'name': json_data['name'],
+            'description': json_data['description'],
+            'private': json_data['private']})
 
         if errors:
             return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
@@ -117,17 +155,21 @@ class ImageResource(Resource):
             return {'message': 'Image not found'}, HTTPStatus.NOT_FOUND
 
         current_user = get_jwt_identity()
+        print(current_user)
+        print(image.author)
 
-        if current_user != image.user_id:
+        if current_user != image.author:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
         image.name = data.get('name') or image.name
         image.description = data.get('description') or image.description
+        image.private = data.get('private')
 
         image.save()
 
         return image_schema.dump(image).data, HTTPStatus.OK
-
+    
+    @jwt_required
     def delete(self, uuid):
         image = Image.get_by_uuid(uuid)
 
@@ -135,8 +177,9 @@ class ImageResource(Resource):
             return {'message': 'Image not found'}, HTTPStatus.NOT_FOUND
 
         current_user = get_jwt_identity()
+        print(current_user)
 
-        if current_user != image.user_id:
+        if current_user != image.author:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
         os.remove(os.getcwd() + '/static/images/images/' + image.filename)
@@ -156,7 +199,7 @@ class ImagePublishResource(Resource):
 
         current_user = get_jwt_identity()
 
-        if current_user != image.user_id:
+        if current_user != image.author:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
         image.is_publish = True
@@ -174,7 +217,7 @@ class ImagePublishResource(Resource):
 
         current_user = get_jwt_identity()
 
-        if current_user != image.user_id:
+        if current_user != image.author:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
         image.is_publish = False
@@ -203,7 +246,7 @@ class ImageCoverUploadResource(Resource):
 
         current_user = get_jwt_identity()
 
-        if current_user != image.user_id:
+        if current_user != image.author:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
 
         if image.cover_image:

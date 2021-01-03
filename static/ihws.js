@@ -50,10 +50,11 @@ $(document).ready(function() {
 
 		$.ajax({
 			type: 'DELETE',
-			url: 'http://localhost:5000/images/' + uuid[2]
+			url: 'http://localhost:5000/images/' + uuid[2],
+			headers: {'Authorization': 'Bearer ' + access_token}
 		}).done(function(response) {
 			console.log(response);
-			window.location.replace('/gallery');
+			window.location.replace('/images');
 		});
 	});
 
@@ -64,12 +65,14 @@ $(document).ready(function() {
 
 		var data = JSON.stringify({
 			'name': document.getElementById('name').innerHTML,
-			'description': document.getElementById('description').innerHTML});
+			'description': document.getElementById('description').innerHTML,
+			'private': document.getElementById('private').checked});
 
 		$.ajax({
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'application/json'},
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + access_token},
 			type: 'PATCH',
 			url: 'http://localhost:5000/images/' + uuid[2],
 			dataType: 'json',
@@ -101,8 +104,9 @@ $(document).ready(function() {
 		cancelButton.attr('id', 'cancel');
 		cancelButton.appendTo('#buttons');
 
-		$('<input id="private" type="checkbox">').appendTo('#privatebutton');
-		$('<label id="privatelabel" style="display: inline">Private</label>').appendTo('#privatebutton');
+		$('<input id="private" type="checkbox" style="float: right; margin-left: 4px">').appendTo('#privatebutton');
+		$('<label id="privatelabel" style="display: inline; float: right">Private</label>').appendTo('#privatebutton');
+
 	});
 
 	$(document).on('click', '#cancel', function() {
@@ -142,6 +146,7 @@ $(document).ready(function() {
 		formData.append('name', $('input[name=name]').val());
 		formData.append('description', document.getElementById('description').value);
 		formData.append('file', $('#file')[0].files[0]);
+		formData.append('private', document.getElementById('private').checked);
 		
 		$.ajax({
 			url: 'http://localhost:5000/images',
@@ -156,6 +161,27 @@ $(document).ready(function() {
 			var json = $.parseJSON(response);
 			console.log(json);
 			window.location.replace('http://localhost:5000/images/' + json['uuid']);
+		});
+	});
+
+	$(document).on('click', '#myimages', function() {
+		$.ajax({
+			url: 'http://localhost:5000/images',
+			headers: {'Authorization': 'Bearer ' + access_token}
+		}).done(function(response) {
+			console.log(response);
+			document.write(response);
+		});
+	});
+
+	$(document).on('click', '#profile', function() {
+		$.ajax({
+			url: 'http://localhost:5000/user',
+			headers: {'Authorization': 'Bearer ' + access_token}
+		}).done(function(response) {
+			console.log(response);
+			document.write();
+			document.write(response);
 		});
 	});
 });

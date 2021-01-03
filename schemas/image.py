@@ -11,14 +11,11 @@ class ImageSchema(Schema):
     description = fields.String(validate=[validate.Length(max=200)])
     uuid = fields.String(validate=[validate.Length(max=200)])
     filename = fields.String(validate=[validate.Length(max=200)])
-    is_publish = fields.Boolean(dump_only=True)
+    private = fields.Boolean()
     cover_url = fields.Method(serialize='dump_cover_url')
-
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
-
-    author = fields.Nested(UserSchema, attribute='user', dump_only=True, only=['id', 'username'])
-
+    author = fields.String(validate=[validate.Length(max=100)])
 
     @post_dump(pass_many=True)
     def wrap(self, data, many, **kwargs):
