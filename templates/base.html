@@ -8,7 +8,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 	<link rel="stylesheet" href="../static/normalize.css">
-	<link rel="stylesheet" href="../static/skeleton.css">
 	<link rel="stylesheet" href="../static/ihws.css">
 	<link rel="icon" type="image/png" href="../static/images/assets/favicon.png">
 	<script src='../static/jquery-3.5.1.min.js'></script>
@@ -18,15 +17,19 @@
 	</script>
 </head>
 <body>
-	<div class='container'>
+	<div style='width: 960px; margin: auto;'>
 	<nav class='navigation-bar'>
 		<a class='navigation-item' href='/'>
 			<img class='navigation-icon' src='../static/images/assets/home.png'>
 			Home
 		</a>
-		<a class='navigation-item' href='/gallery'>
+		<a class='navigation-item' href='/images'>
 			<img class='navigation-icon' src='../static/images/assets/gallery.png'>
-			Gallery
+			Images
+		</a>
+		<a class='navigation-item'>
+			<img class='navigation-icon' src='../static/images/assets/search.png'>
+			Search
 		</a>
 		{% if not session['access_token'] %}
 		<a class='navigation-item' href='/signup' style='float: right'>Sign up</a>
@@ -40,8 +43,8 @@
 			<img class='navigation-icon' src='../static/images/assets/menu.png'>
 			<div class='menu-content'>
 				<a id='revoke'>Sign out</a></br>
-				<a href='/gallery'>My Gallery</a></br>
-				<a>Settings</a>
+				<a id='myimages'>My images</a></br>
+				<a id='profile'>Profile</a>
 			</div>
 		</div>
 		{% endif %}

@@ -23,8 +23,8 @@ class TokenResource(Resource):
         if user.is_active is False:
             return {'message': 'The user account is not activated yet'}, HTTPStatus.FORBIDDEN
 
-        access_token = create_access_token(identity=user.id, fresh=True)
-        refresh_token = create_refresh_token(identity=user.id)
+        access_token = create_access_token(identity=user.username, fresh=True)
+        refresh_token = create_refresh_token(identity=user.username)
 
         session['access_token'] = access_token
         session['refresh_token'] = refresh_token

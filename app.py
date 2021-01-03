@@ -68,24 +68,6 @@ def register_resources(app):
     def upload():
         return render_template('upload.html')
      
-    @app.route('/gallery')
-    def get_gallery():
-        images = Image.get_all()
-        response = requests.get(
-                url='http://localhost:5000/images')
-
-        json = response.json()
-        filenames = []
-        uuids = []
-        names = []
-
-        for a in json['data']:
-            filenames.append(a['filename'])
-            uuids.append(a['uuid'])
-            names.append(a['name'])
-
-        return render_template("gallery.html", filenames=filenames, uuids=uuids, names=names)
-    
     api.add_resource(TagResource, '/tags/<int:tag_id>')
     api.add_resource(TagListResource, '/tags')
     api.add_resource(ImageCoverUploadResource, '/images/<int:image_id>/cover')
@@ -96,7 +78,7 @@ def register_resources(app):
     api.add_resource(RevokeResource, '/revoke')
     api.add_resource(MeResource, '/me')
     api.add_resource(UserListResource, '/users')
-    api.add_resource(UserResource, '/users/<string:username>')
+    api.add_resource(UserResource, '/user')
     api.add_resource(UserImageListResource, '/users/<string:username>/images')
     api.add_resource(ImageListResource, '/images')
     api.add_resource(ImageResource, '/images/<string:uuid>')

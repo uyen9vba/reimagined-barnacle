@@ -1,8 +1,6 @@
 from extensions import db
 
 class User(db.Model):
-
-
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -13,8 +11,7 @@ class User(db.Model):
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     updated_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now(),
             onupdate=db.func.now())
-    avatar_image = db.Column(db.String(100), default=None)
-
+    avatar_image = db.Column(db.String(100), default='default-avatar.jpg')
     images = db.relationship('Image', backref='user')
     
     @classmethod
