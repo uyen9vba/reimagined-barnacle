@@ -6,24 +6,28 @@ Upload
 {% endblock %}
 
 {% block content %}
-<div style='width: 940px; margin: auto;'>
+<div style='width: 500px; margin: auto;'>
 <section class='header'>
-    <h4 class='title' style='text-align: center; margin-top: 5%;'>Upload an image</h4>
+    <h1 style='text-align: center; margin-top: 50px'>Upload an image</h1>
 </section>
 <form id='upload'>
-    <label>Select a file:</label>
-    <input id='file' class='u-full-width' type='file'>
-    <label>Name</label>
-    <div class='row'>
-	    <input name='name' class='six columns' type='text'>
-    </div>
-    <label>Description</label>
-    <div class='row'>
-	<textarea id='description' class='eight columns' type='text'></textarea>
-    </div>
-    <input id='private' type='checkbox'>
-    <label style='display: inline-block'>Private</label></br>
-    <input class='button-primary' type='submit' value='upload'>
+	<div>
+		<label>Select a file:</label>
+		<input id='file' type='file'>
+	</div>
+	<div style='margin-top: 10px'>
+		<label>Name</label></br>
+		<input name='name' type='text'>
+	</div>
+	<div style='margin-top: 10px'>
+		<label>Description</label></br>
+		<textarea id='description' type='text'></textarea>
+	</div>
+	<div style='margin-top: 10px'>
+		<input id='private' type='checkbox'>
+		<label>Private</label>
+	</div>
+	<input style='margin-top: 10px' type='submit' value='Upload'>
 </form>
 </div>
 {% endblock %}

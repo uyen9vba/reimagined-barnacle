@@ -7,12 +7,12 @@ Profile
 
 {% block content %}
 <div style='width: 500px; margin: auto;'>
-	<section class='header'>
-	    <h1 style='text-align: center; margin-top: 5%;'>Profile</h1>
+	<section>
+	    <h1 style='text-align: center; margin-top: 50px'>Profile</h1>
 	</section>
-	<div id='avatar' class='avatar-change' style='position: relative;'>
-		<img src='../static/images/assets/{{ avatar_image }}' style='position: relative; height: 150px; margin: auto;'>
-		<img class='change' src='../static/images/assets/change.png' style='position: relative; height: 32px; margin: auto;'>
+	<div id='avatar' style='width: 150; margin: auto; position: relative; text-align: center'>
+		<img src='../static/images/assets/{{ avatar_image }}' height='150' style='vertical-align: middle'>
+		<img src='../static/images/assets/change.png' height='32' style='position: absolute; left: 58%'>
 	</div>
 	<div style='display: flex; margin: auto;'>
 		<div style='flex: 50%'>
@@ -29,8 +29,8 @@ Profile
 	</div>
 	<div style='margin-top: 10px;'>
 		<div id='buttons'>
-			<input id='delete' value='Delete' type='button'>
 			<input id='edit' value='Edit' type='button'>
+			<input id='delete' value='Delete' type='button'>
 		</div>
 	</div>
 </div>
