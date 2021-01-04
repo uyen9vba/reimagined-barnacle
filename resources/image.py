@@ -9,6 +9,8 @@ import datetime
 from models.image import Image
 from schemas.image import ImageSchema
 from models.user import User
+from models.tag import Tag
+from schemas.tag import TagSchema
 
 import os
 from extensions import image_set
@@ -126,6 +128,12 @@ class ImageResource(Resource):
             time = f'{created_at.total_seconds()}'
 
         time = time + ' ago'
+
+        words = image.description.split(' ')
+        print(words)
+
+        tags = Tag.get_all()
+        print(tags)
 
         return make_response(render_template(
                 '/imagecontent.html',

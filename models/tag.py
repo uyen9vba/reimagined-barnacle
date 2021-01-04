@@ -22,6 +22,4 @@ class Tag(db.Model):
 
     @classmethod
     def get_all(cls):
-
         return cls.query.filter_by().all()
-
