@@ -8,5 +8,4 @@ class TagSchema(Schema):
 
     id = fields.Integer(dump_only=True)
     name = fields.String(required=True, validate=[validate.Length(max=100)])
-
-    author = fields.Nested(UserSchema, attribute='user', dump_only=True, only=['id', 'username'])
+    author = fields.String(validate=[validate.Length(max=100)])

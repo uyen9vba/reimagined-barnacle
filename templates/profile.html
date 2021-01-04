@@ -6,30 +6,32 @@ Profile
 {% endblock %}
 
 {% block content %}
-<div style='width: 600px; margin: auto;'>
-<section class='header'>
-    <h4 class='title' style='text-align: center; margin-top: 5%;'>Profile</h4>
-</section>
-<div>
-	<img src='../static/images/assets/{{ avatar_image }}' style='display: block; height: 150px; margin: auto;'>
-<div class='row' style='margin-top: 30px;'>
-	<div class='one-half column'>
-		<p style='display: inline;'>Username:</p>
-		<p id='username' style='display: inline;'>{{ username }}</p>
+<div style='width: 500px; margin: auto;'>
+	<section class='header'>
+	    <h1 style='text-align: center; margin-top: 5%;'>Profile</h1>
+	</section>
+	<div id='avatar' class='avatar-change' style='position: relative;'>
+		<img src='../static/images/assets/{{ avatar_image }}' style='position: relative; height: 150px; margin: auto;'>
+		<img class='change' src='../static/images/assets/change.png' style='position: relative; height: 32px; margin: auto;'>
 	</div>
-	<div class='one-half column'>
-		<p style='display: inline;'>Email:</p>
-		<p id='email' style='display: inline;'>{{ email }}</p>
+	<div style='display: flex; margin: auto;'>
+		<div style='flex: 50%'>
+			<p>Username:</p>
+			<p id='username'>{{ username }}</p>
+		</div>
+		<div>
+			<p>Email:</p>
+			<p id='email'>{{ email }}</p>
+		</div>
 	</div>
-</div>
-<div class='row' style='margin-top: 10px;'>
-	<input class='button' value='Change password'>
-</div>
-<div class='row' style='margin-top: 10px;'>
-	<div id='buttons'>
-		<input id='delete' class='button' value='Delete' type='button'>
-		<input id='edit' class='button' value='Edit' type='button'>
+	<div style='margin-top: 10px;'>
+		<input type='button' value='Change password'>
 	</div>
-</div>
+	<div style='margin-top: 10px;'>
+		<div id='buttons'>
+			<input id='delete' value='Delete' type='button'>
+			<input id='edit' value='Edit' type='button'>
+		</div>
+	</div>
 </div>
 {% endblock %}

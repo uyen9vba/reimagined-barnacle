@@ -6,26 +6,26 @@ Sign up
 {% endblock %}
 
 {% block content %}
-<div style='width: 940px; margin: auto;'>
+<div style='width: 500px; margin: auto;'>
 <section class='header'>
-    <h4 class='title' style='text-align: center; margin-top: 5%;'>Sign up</h4>
+    <h1 style='text-align: center; margin-top: 50px'>Sign up</h1>
 </section>
 <form id='signup'> 
-	<div class='row'>
-		<div class='one-half column'>
-			<label>Username</label>
-			<input name='username' class='u-full-width' type='text'>	
+	<div style='display: flex; margin: auto'>
+		<div style='flex: 50%'>
+			<label>Username</label></br>
+			<input name='username' type='text'>	
 		</div>
-		<div class='one-half column'>
-			<label>Password</label>
-			<input name='password' class='u-full-width' type='password'>
+		<div>
+			<label>Password</label></br>
+			<input name='password' type='password'>
 		</div>
 	</div>
-	<div class'eight columns'>
-		<label>Email</label>
-		<input name='email' class='u-full-width' type='email'>
+	<div style='margin-top: 20px;'>
+		<label>Email</label></br>
+		<input name='email' type='email'>
 	</div>
-	<input class='button-primary' type='submit' value='Sign up'>
+	<input type='submit' value='Sign up' style='margin-top: 20px;'>
 </form>
 </div>
 {% endblock %}
