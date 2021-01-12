@@ -5,12 +5,15 @@ class Tag(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-
-    user_id = db.Column(db.Integer(), db.ForeignKey('user.id'))
+    author = db.Column(db.String(100), db.ForeignKey('user.username'))
 
     @classmethod
-    def get_by_id(cls, tag_id):
-        return cls.query.filter_by(id=tag_id).first()
+    def get_by_id(cls, id):
+        return cls.query.filter_by(id=id).first()
+
+    @classmethod
+    def get_by_name(cls, name):
+        return cls.query.filter_by(name=name).first()
 
     def save(self):
         db.session.add(self)

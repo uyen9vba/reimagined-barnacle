@@ -58,7 +58,7 @@ $(document).ready(function() {
 		});
 	});
 
-	$(document).on('click', '#patch', function(event) {
+	$(document).on('click', '#patch-image', function(event) {
 		event.preventDefault();
 
 		var uuid = window.location.pathname.split('/');
@@ -83,18 +83,14 @@ $(document).ready(function() {
 		});
 	});
 
-
 	$(document).on('click', '#edit', function(event) {
 		event.preventDefault();
 
-		$('#name').attr('contenteditable', 'true');
-		$('#name').attr('style', 'background-color: #D0E8F2;');
-		$('#description').attr('contenteditable', 'true');
-		$('#description').attr('style', 'background-color: #D0E8F2;');
+		$('.edit').attr('contenteditable', 'true');
+		$('.edit').attr('style', 'background-color: #D0E8F2; border-radius: 10px;');
 
 		var patchButton = $('#edit').clone();
 		patchButton.attr('value', 'Save');
-		patchButton.attr('id', 'patch');
 		patchButton.appendTo('#buttons');
 
 		document.getElementById('edit').remove();
@@ -104,16 +100,20 @@ $(document).ready(function() {
 		cancelButton.attr('id', 'cancel');
 		cancelButton.appendTo('#buttons');
 
-		$('<input id="private" type="checkbox" style="float: right; margin-left: 4px">').appendTo('#privatebutton');
-		$('<label id="privatelabel" style="display: inline; float: right">Private</label>').appendTo('#privatebutton');
+		if (window.location.href == 'http://localhost:5000/profile') {
+			patchButton.attr('id', 'patch-profile');
+		}
+		else {
+			patchButton.attr('id', 'patch-image');
 
+			$('<input id="private" type="checkbox" style="float: right; margin-left: 4px">').appendTo('#privatebutton');
+			$('<label id="privatelabel" style="display: inline; float: right">Private</label>').appendTo('#privatebutton');
+		}
 	});
 
 	$(document).on('click', '#cancel', function() {
-		$('#name').attr('contenteditable', 'false');
-		$('#name').attr('style', 'background-color: #FFF;');
-		$('#description').attr('contenteditable', 'false');
-		$('#description').attr('style', 'background-color: #FFF;');
+		$('.edit').attr('contenteditable', 'false');
+		$('.edit').attr('style', 'background-color: #FFF;');
 
 		document.getElementById('cancel').remove();
 
@@ -123,8 +123,13 @@ $(document).ready(function() {
 		editButton.appendTo('#buttons');
 
 		document.getElementById('patch').remove();
-		document.getElementById('private').remove();
-		document.getElementById('privatelabel').remove();
+
+		if (window.location.href == 'http://localhost:5000/profile') {
+		}
+		else {
+			document.getElementById('private').remove();
+			document.getElementById('privatelabel').remove();
+		}
 	});
 
 	$(document).on('click', '#revoke', function() {
@@ -147,6 +152,16 @@ $(document).ready(function() {
 		formData.append('description', document.getElementById('description').value);
 		formData.append('file', $('#file')[0].files[0]);
 		formData.append('private', document.getElementById('private').checked);
+
+		var tags = $('#tags > p');
+		console.log(tags);
+		var json_tags = [];
+
+		for (var a = 0; a < tags.length; a++) {
+			json_tags.push(tags[a].innerHTML);
+		}
+		formData.append('tags', json_tags);
+		console.log(json_tags);
 		
 		$.ajax({
 			url: 'http://localhost:5000/images',
@@ -164,24 +179,36 @@ $(document).ready(function() {
 		});
 	});
 
-	$(document).on('click', '#myimages', function() {
+	$(document).on('click', '#patch-profile', function(event) {
+		event.preventDefault;
+
+		var formData = new FormData();
+		console.log(document.getElementById('username').value);
+
+		formData.append('username', document.getElementById('username').value);
+		formData.append('email', document.getElementById('email').value);
+		formData.append('file', $('#file')[0].files[0]);
+
+		console.log(formData);
+
 		$.ajax({
-			url: 'http://localhost:5000/images',
-			headers: {'Authorization': 'Bearer ' + access_token}
+			url: 'http://localhost:5000/user',
+			type: 'PATCH',
+			headers: {'Authorization': 'Bearer ' + access_token},
+			data: formData, 
+			mimeType: 'multipart/form-data',
+			enctype: 'multipart/form-data',
+			contentType: false,
+			processData: false
 		}).done(function(response) {
 			console.log(response);
-			document.write(response);
+			window.location.replace('/');
 		});
 	});
 
-	$(document).on('click', '#profile', function() {
-		$.ajax({
-			url: 'http://localhost:5000/user',
-			headers: {'Authorization': 'Bearer ' + access_token}
-		}).done(function(response) {
-			console.log(response);
-			document.write();
-			document.write(response);
-		});
+	$(document).on('click', '#add-tag', function() {
+		var tag = $('.tag').clone();
+		tag.text('New');
+		tag.prependTo('#tags');
 	});
 });

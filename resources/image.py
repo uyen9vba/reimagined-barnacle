@@ -20,69 +20,53 @@ from utils import save_image
 image_schema = ImageSchema()
 image_list_schema = ImageSchema(many=True)
 image_cover_schema = ImageSchema(only=('cover_url', ))
+tag_schema = TagSchema()
 
 
 class ImageListResource(Resource):
-    @jwt_optional
-    def get(self):
-        if request.headers.get('Authorization'):
-            current_user = get_jwt_identity()
-            print(current_user)
-
-            images = Image.get_all_by_user(current_user)
-        else:
-            images = Image.get_all()
-
-        data = image_list_schema.dump(images).data
-        json = data['data']
-        print(json)
-
-        filenames = []
-        uuids = []
-        names = []
-
-        for a in json:
-            filenames.append(a['filename'])
-            uuids.append(a['uuid'])
-            names.append(a['name'])
-
-        return make_response(render_template(
-            "gallery.html",
-            filenames=filenames,
-            uuids=uuids,
-            names=names))
-
     @jwt_required
     def post(self):
+        current_user = get_jwt_identity()
+
         name = request.form.get('name')
         description = request.form.get('description')
         file = request.files['file']
         filename = save_image(image=file, folder='images')
         filename = os.path.splitext(filename)
         private = request.form.get('private')
-
-        data, errors = image_schema.load({
-            'name': name,
-            'description': description,
-            'uuid': filename[0],
-            'private': True if private == 'true' else False,
-            'filename': filename[0] + filename[1]})
-        
-        if errors:
-            return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
-
-        image = Image(**data)
-
-        current_user = get_jwt_identity()
-        print(current_user)
+        form_tags = request.form.get('tags').split(',')
+        tags = []
 
         if not file:
             return {'message': 'Not a valid image'}, HTTPStatus.BAD_REQUEST
 
         if not image_set.file_allowed(file, file.filename):
             return {'message': 'File type not allowed'}, HTTPStatus.BAD_REQUEST
+        
+        for a, b in enumerate(form_tags):
+            if Tag.get_by_name(form_tags[a]) is None:
+                data, errors = tag_schema.load({
+                    'author': current_user,
+                    'name': form_tags[a]})
 
-        image.author = current_user
+                tag = Tag(**data)
+                tag.save()
+
+            tags.append(form_tags[a])
+
+        data, errors = image_schema.load({
+            'name': name,
+            'description': description,
+            'uuid': filename[0],
+            'private': True if private == 'true' else False,
+            'filename': filename[0] + filename[1],
+            'author': current_user,
+            'tags': tags})
+
+        if errors:
+            return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
+
+        image = Image(**data)
         image.save()
 
         return image_schema.dump(image).data, HTTPStatus.CREATED
@@ -91,6 +75,7 @@ class ImageResource(Resource):
     @jwt_optional
     def get(self, uuid):
         image = Image.get_by_uuid(uuid)
+        print(image)
 
         if image is None:
             return {'message': 'image not found'}, HTTPStatus.NOT_FOUND
@@ -129,12 +114,6 @@ class ImageResource(Resource):
 
         time = time + ' ago'
 
-        words = image.description.split(' ')
-        print(words)
-
-        tags = Tag.get_all()
-        print(tags)
-
         return make_response(render_template(
                 '/imagecontent.html',
                 avatar_image=user.avatar_image,
@@ -142,7 +121,8 @@ class ImageResource(Resource):
                 time=time,
                 name=image.name,
                 filename=image.filename,
-                description=image.description))
+                description=image.description,
+                tags=image.tags))
 
     @jwt_required
     def patch(self, uuid):

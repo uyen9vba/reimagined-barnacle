@@ -26,12 +26,8 @@
 			<img class='navigation-icon' src='../static/images/assets/gallery.png'>
 			Images
 		</a>
-		<a class='navigation-item'>
-			<img class='navigation-icon' src='../static/images/assets/search.png'>
-			Search
-		</a>
 		{% if not session['access_token'] %}
-		<a class='navigation-item' href='/signup' style='float: right'>Sign up</a>
+		<a class='navigation-item' href='/signup' style='float: right; padding-right: 10px'>Sign up</a>
 		<a class='navigation-item' href='/signin' style='float: right'>Sign in</a>
 		{% else %}
 		<a class='navigation-item' href='/upload'>
@@ -42,11 +38,15 @@
 			<img class='navigation-icon' src='../static/images/assets/menu.png'>
 			<div class='menu-content'>
 				<a id='revoke'>Sign out</a></br>
-				<a id='myimages'>My images</a></br>
-				<a id='profile'>Profile</a>
+				<a href='/images?private=true'>My images</a></br>
+				<a href='/profile'>Profile</a>
 			</div>
 		</div>
 		{% endif %}
+		<a class='navigation-item' style='padding-top: 0; padding-bottom: 0;'>
+			<img class='navigation-icon' src='../static/images/assets/search.png'>
+			<input type='search' placeholder='Search'>
+		</a>
 	</nav>
 	</div>
 	{% block content %}{% endblock %}

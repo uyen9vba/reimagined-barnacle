@@ -1,6 +1,4 @@
 from marshmallow import Schema, fields, post_dump, validate, validates, ValidationError
-from schemas.user import UserSchema
-from flask import url_for
 
 class TagSchema(Schema):
     class Meta:
