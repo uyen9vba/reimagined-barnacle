@@ -1,5 +1,4 @@
 from marshmallow import Schema, fields, post_dump, validate, validates, ValidationError
-from schemas.user import UserSchema
 from flask import url_for
 
 class ImageSchema(Schema):
@@ -16,6 +15,7 @@ class ImageSchema(Schema):
     created_at = fields.DateTime(dump_only=True)
     updated_at = fields.DateTime(dump_only=True)
     author = fields.String(validate=[validate.Length(max=100)])
+    tags = fields.List(fields.String(validate=[validate.Length(max=100)]))
 
     @post_dump(pass_many=True)
     def wrap(self, data, many, **kwargs):

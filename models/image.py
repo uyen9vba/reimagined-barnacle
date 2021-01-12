@@ -1,4 +1,5 @@
 from extensions import db
+from models.tag import Tag
 
 
 class Image(db.Model):
@@ -11,10 +12,10 @@ class Image(db.Model):
     filename = db.Column(db.String(100))
     private = db.Column(db.Boolean())
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now(),
-            onupdate=db.func.now())
+    updated_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now(), onupdate=db.func.now())
     cover_image = db.Column(db.String(100), default=None)
     author = db.Column(db.String(100), db.ForeignKey('user.username'))
+    tags = db.Column(db.ARRAY(db.String(100)))
 
     @classmethod
     def get_all(cls, private=None):

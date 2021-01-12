@@ -11,27 +11,30 @@ Profile
 	    <h1 style='text-align: center; margin-top: 50px'>Profile</h1>
 	</section>
 	<div id='avatar' style='width: 150; margin: auto; position: relative; text-align: center'>
-		<img src='../static/images/assets/{{ avatar_image }}' height='150' style='vertical-align: middle'>
-		<img src='../static/images/assets/change.png' height='32' style='position: absolute; left: 58%'>
-	</div>
-	<div style='display: flex; margin: auto;'>
-		<div style='flex: 50%'>
-			<p>Username:</p>
-			<p id='username'>{{ username }}</p>
-		</div>
-		<div>
-			<p>Email:</p>
-			<p id='email'>{{ email }}</p>
-		</div>
-	</div>
-	<div style='margin-top: 10px;'>
-		<input type='button' value='Change password'>
+		<img src='../static/images/assets/{{ avatar_image }}' height='150' style='vertical-align: middle; border-radius: 50%;'>
 	</div>
 	<div style='margin-top: 10px;'>
 		<div id='buttons'>
 			<input id='edit' value='Edit' type='button'>
 			<input id='delete' value='Delete' type='button'>
 		</div>
+	</div>
+	<div style='margin-top: 10px'>
+		<label>Avatar</label></br>
+		<input id='file' value='Change avatar' type='file'>
+	</div>
+	<div style='display: flex; margin: auto;'>
+		<div style='flex: 50%'>
+			<p>Username:</p>
+			<p id='username' class='edit' onclick="this.innerHTML=''">{{ username }}</p>
+		</div>
+		<div>
+			<p>Email:</p>
+			<p id='email' class='edit'>{{ email }}</p>
+		</div>
+	</div>
+	<div style='margin-top: 10px;'>
+		<input type='button' value='Change password'>
 	</div>
 </div>
 {% endblock %}

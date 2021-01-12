@@ -13,6 +13,7 @@ class User(db.Model):
             onupdate=db.func.now())
     avatar_image = db.Column(db.String(100), default='default-avatar.jpg')
     images = db.relationship('Image', backref='user')
+    tags = db.relationship('Tag', backref='user')
     
     @classmethod
     def get_by_username(cls, username):

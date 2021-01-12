@@ -59,27 +59,14 @@ class UserListResource(Resource):
 
 class UserResource(Resource):
     @jwt_required
-    def get(self):
-        current_user = get_jwt_identity()
-
-        user = User.get_by_username(username=current_user)
-
-        if user is None:
-            return {'message': 'user not found'}, HTTPStatus.NOT_FOUND
-
-        if current_user == user.username:
-            data = user_schema.dump(user).data
-        else:
-            data = user_public_schema.dump(user).data
-
-        return render_template(
-            'profile.html',
-            avatar_image=user.avatar_image,
-            username=user.username,
-            email=user.email)
-
-    @jwt_required
     def patch(self):
+        current_user = get_jwt_identity()
+        
+        user = User.get_by_username(current_user)
+
+        if user.username != current_user:
+            return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
+
         file = request.files['file']
 
         if not file:
@@ -88,8 +75,6 @@ class UserResource(Resource):
         if not image_set.file_allowed(file, file.filename):
             return {'message': 'File type not allowed'}, HTTPStatus.BAD_REQUEST
 
-        user = User.get_by_id(id=get_jwt_identity())
-
         if user.avatar_image:
             avatar_path = image_set.path(folder='avatars', filename=user.avatar_image)
             if os.path.exists(avatar_path):
@@ -97,7 +82,10 @@ class UserResource(Resource):
 
         filename = save_image(image=file, folder='avatars')
 
+        user.username = request.form.get('username')
+        user.email = request.form.get('email')
         user.avatar_image = filename
+
         user.save()
 
         return user_avatar_schema.dump(user).data, HTTPStatus.OK

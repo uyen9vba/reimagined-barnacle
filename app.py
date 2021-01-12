@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from http import HTTPStatus
 from flask_restful import Api
 from flask_uploads import configure_uploads, patch_request_class, extension
-from flask_jwt_extended import get_jwt_identity, get_jwt_claims, jwt_required
+from flask_jwt_extended import get_jwt_identity, get_jwt_claims, jwt_required, decode_token
 from markupsafe import escape
 import requests
 import json
@@ -12,6 +12,7 @@ import uuid
 from config import Config
 from extensions import db, jwt, image_set
 from models.image import Image
+from schemas.image import ImageSchema
 from models.user import User
 from resources.image import ImageListResource, ImageResource, ImagePublishResource, ImageCoverUploadResource
 from resources.user import UserListResource, UserResource, MeResource, UserImageListResource, UserActivateResource, UserAvatarUploadResource
@@ -20,6 +21,8 @@ from resources.token import TokenResource, RefreshResource, RevokeResource, blac
 from resources.tag import TagResource, TagListResource
 from models.tag import Tag
 from utils import save_image
+
+image_list_schema = ImageSchema(many=True)
 
 def create_app():
     app = Flask(__name__)
@@ -67,6 +70,51 @@ def register_resources(app):
     @app.route('/upload')
     def upload():
         return render_template('upload.html')
+
+    @app.route('/profile')
+    def profile():
+        current_user = decode_token(session['access_token']).get('identity', None)
+
+        user = User.get_by_username(username=current_user)
+
+        if user is None:
+            return {'message': 'user not found'}, HTTPStatus.NOT_FOUND
+
+        return render_template(
+                'profile.html',
+                avatar_image=user.avatar_image,
+                username=user.username,
+                email=user.email)
+
+    @app.route('/images')
+    def images():
+        if request.args.get('private') == 'true':
+            current_user = decode_token(session['access_token']).get('identity', None)
+
+            if current_user:
+                images = Image.get_all_by_user(current_user)
+            else:
+                images = Image.get_all()
+        else:
+            images = Image.get_all()
+
+        data = image_list_schema.dump(images).data
+        json = data['data']
+
+        filenames = []
+        uuids = []
+        names = []
+
+        for a in json:
+            filenames.append(a['filename'])
+            uuids.append(a['uuid'])
+            names.append(a['name'])
+
+        return render_template(
+                "gallery.html",
+                filenames=filenames,
+                uuids=uuids,
+                names=names)
      
     api.add_resource(TagResource, '/tags/<int:tag_id>')
     api.add_resource(TagListResource, '/tags')
