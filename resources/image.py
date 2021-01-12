@@ -127,12 +127,13 @@ class ImageResource(Resource):
     @jwt_required
     def patch(self, uuid):
         json_data = request.get_json()
-        print(json_data['private'])
+        print(json_data)
 
         data, errors = image_schema.load({
             'name': json_data['name'],
             'description': json_data['description'],
-            'private': json_data['private']})
+            'private': json_data['private'],
+            'tags': json_data['tags']})
 
         if errors:
             return {'message': 'Validation errors', 'errors': errors}, HTTPStatus.BAD_REQUEST
@@ -143,8 +144,6 @@ class ImageResource(Resource):
             return {'message': 'Image not found'}, HTTPStatus.NOT_FOUND
 
         current_user = get_jwt_identity()
-        print(current_user)
-        print(image.author)
 
         if current_user != image.author:
             return {'message': 'Access is not allowed'}, HTTPStatus.FORBIDDEN
@@ -152,6 +151,7 @@ class ImageResource(Resource):
         image.name = data.get('name') or image.name
         image.description = data.get('description') or image.description
         image.private = data.get('private')
+        image.tags = data.get('tags')
 
         image.save()
 

@@ -63,10 +63,21 @@ $(document).ready(function() {
 
 		var uuid = window.location.pathname.split('/');
 
+		var tags = $('#tags > p');
+		console.log(tags);
+		var json_tags = [];
+
+		for (var a = 0; a < tags.length; a++) {
+			json_tags.push(tags[a].innerHTML);
+		}
+
 		var data = JSON.stringify({
 			'name': document.getElementById('name').innerHTML,
 			'description': document.getElementById('description').innerHTML,
-			'private': document.getElementById('private').checked});
+			'private': document.getElementById('private').checked,
+			'tags': json_tags});
+
+		console.log(json_tags);
 
 		$.ajax({
 			headers: {
@@ -108,6 +119,10 @@ $(document).ready(function() {
 
 			$('<input id="private" type="checkbox" style="float: right; margin-left: 4px">').appendTo('#privatebutton');
 			$('<label id="privatelabel" style="display: inline; float: right">Private</label>').appendTo('#privatebutton');
+
+			$('<input id="add-tag" type="button" value="Add tag">').prependTo('#tag-div');
+			$('<input id="tag" type="text">').prependTo('#tag-div');
+			$('<label id="tag-label">Tags</label></br>').prependTo('#tag-div');
 		}
 	});
 
@@ -117,18 +132,27 @@ $(document).ready(function() {
 
 		document.getElementById('cancel').remove();
 
-		var editButton = $('#patch').clone();
-		editButton.attr('value', 'Edit');
-		editButton.attr('id', 'edit');
-		editButton.appendTo('#buttons');
-
-		document.getElementById('patch').remove();
-
 		if (window.location.href == 'http://localhost:5000/profile') {
+			var editButton = $('#patch-profile').clone();
+			editButton.attr('value', 'Edit');
+			editButton.attr('id', 'edit');
+			editButton.appendTo('#buttons');
+
+			document.getElementById('patch-profile').remove();
 		}
 		else {
+			var editButton = $('#patch-image').clone();
+			editButton.attr('value', 'Edit');
+			editButton.attr('id', 'edit');
+			editButton.appendTo('#buttons');
+
+			document.getElementById('patch-image').remove();
+
 			document.getElementById('private').remove();
 			document.getElementById('privatelabel').remove();
+			document.getElementById('tag-label').remove();
+			document.getElementById('tag').remove();
+			document.getElementById('add-tag').remove();
 		}
 	});
 
@@ -207,8 +231,13 @@ $(document).ready(function() {
 	});
 
 	$(document).on('click', '#add-tag', function() {
-		var tag = $('.tag').clone();
-		tag.text('New');
+		var tag = $('<p id="delete-tag" class="tag"></p>');
+		tag.text($('#tag').val());
 		tag.prependTo('#tags');
+		$('#tag').text('');
+	});
+
+	$(document).on('click', '#delete-tag', function() {
+		$(this).remove();
 	});
 });
