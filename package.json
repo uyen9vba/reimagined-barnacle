@@ -1,0 +1,26 @@
+{
+  "name": "ihws",
+  "version": "0.1.0",
+  "description": "Image hosting web service",
+  "main": "ihws.js",
+  "dependencies": {
+    "npx": "^10.2.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-plugin-react": "^7.22.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uyen9vba/reimagined-barnacle.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uyen9vba/reimagined-barnacle/issues"
+  },
+  "homepage": "https://github.com/uyen9vba/reimagined-barnacle#readme"
+}

@@ -32,10 +32,12 @@
 	<div>
 		<p id='description' class='edit'>{{ description }}</p>
 	</div>	
-	<div id='tags' style='display: flex; margin-top: 10px'>
-		{% for a in tags %}
-		<p class='tag'>{{ a }}</p>
-		{% endfor %}
+	<div id='tag-div' style='margin-top: 10px'>
+		<div id='tags' style='display: flex; margin-top: 10px'>
+			{% for a in tags %}
+			<p class='tag'>{{ a }}</p>
+			{% endfor %}
+		</div>
 	</div>
 	<div style='margin-top: 10px'>
 		<label>Comment:</label></br>

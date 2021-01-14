@@ -10,7 +10,7 @@ Upload
 <section class='header'>
     <h1 style='text-align: center; margin-top: 50px'>Upload an image</h1>
 </section>
-<form id='profile'>
+<form id='upload'>
 	<div>
 		<label>Select a file:</label></br>
 		<input id='file' type='file'>
@@ -25,10 +25,10 @@ Upload
 	</div>
 	<div style='margin-top: 10px'>
 		<label>Tags</label></br>
+		<input id='tag' type='text'>
+		<input id='add-tag' type='button' value='Add tag'>
 		<div id='tags' style='display: flex; margin-top: 10px'>
-			<p class='tag' contenteditable='true'>Tag</p>
 		</div>
-		<img id='add-tag' src='../static/images/assets/plus.png' style='height: 32px; cursor: pointer'>
 	</div>
 	<div style='margin-top: 10px'>
 		<input id='private' type='checkbox'>
